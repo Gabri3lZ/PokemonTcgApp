@@ -1,25 +1,31 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+import {CardsProvider} from "../../providers/cards/cards";
+import {Card} from "../../model/card";
 
-/**
- * Generated class for the SetPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-
-@IonicPage()
 @Component({
   selector: 'page-set',
   templateUrl: 'set.html',
 })
 export class SetPage {
+  cards: Card[] = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private cardsProvider: CardsProvider) {
+    let setCode = navParams.get('setCode');
+
+    this.cardsProvider.loadCards(setCode).then((cards: Card[]) => {
+      this.cards = cards;
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SetPage');
+  }
+
+  itemTapped(event, cardId) {
+    this.navCtrl.push(SetPage, {
+      cardId: cardId
+    });
   }
 
 }

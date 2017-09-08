@@ -3,13 +3,13 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
+    <ion-title>Sets</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let set of sets" (click)="itemTapped($event, set)">
+    <button ion-item *ngFor="let set of sets" (click)="itemTapped($event, set.code)">
       <ion-icon [name]="set.code" item-left></ion-icon>
       {{set.name}}
       <div class="item-note" item-right>
@@ -17,7 +17,4 @@
       </div>
     </button>
   </ion-list>
-  <div *ngIf="selectedSet" padding>
-    You navigated here from <b>{{selectedSet.name}}</b>
-  </div>
 </ion-content>
