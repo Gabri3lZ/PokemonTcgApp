@@ -39,7 +39,9 @@
         <ion-item>
           <ion-icon name="pricetags" item-start></ion-icon>
           Format:
-          <ion-badge item-end>{{set.standardLegal ? 'Standard' : (set.expandedLegal ? 'Expanded' : 'Legacy')}}</ion-badge>
+          <ion-badge item-end>
+            {{set.standardLegal ? 'Standard' : (set.expandedLegal ? 'Expanded' : 'Legacy')}}
+          </ion-badge>
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -86,7 +88,9 @@
     <ion-grid *ngSwitchCase="'grid'">
       <ion-row *ngFor="let i of getIndexArray(3)">
         <ion-col *ngFor="let j of [0, 1, 2]">
-          <img *ngIf="cards[3 * i + j]" class="image" [src]="cards[3 * i + j].imageUrl" (click)="itemTapped($event, cards[3 * i + j])">
+          <img *ngIf="cards[3 * i + j]" class="image"
+               [src]="cards[3 * i + j].imageUrl"
+               (click)="itemTapped($event, cards[3 * i + j])">
         </ion-col>
       </ion-row>
     </ion-grid>
