@@ -95,7 +95,7 @@
         <ion-card>
           <ion-card-content>
             <ion-grid>
-              <ion-row>
+              <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
                 <ion-col col-4>
                   <h2>Weakness</h2>
                 </ion-col>
@@ -106,7 +106,7 @@
                   <h2>Retreat Cost</h2>
                 </ion-col>
               </ion-row>
-              <ion-row>
+              <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
                 <ion-col col-4>
                   <div *ngFor="let weakness of card.weaknesses">
                     <h3 class="inline">{{weakness.type}}</h3>
