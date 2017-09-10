@@ -10,10 +10,12 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col col-6>
+      <ion-col>
         <img class="image" [src]="card.imageUrl"/>
       </ion-col>
-      <ion-col col-6>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 col-md>
         <ion-card>
           <ion-card-content>
             <ion-card-title>
@@ -40,9 +42,11 @@
             </ion-item>
           </ion-card-content>
         </ion-card>
+      </ion-col>
+      <ion-col col-12 col-md>
         <ion-card>
           <ion-card-content>
-            <ion-list>
+            <ion-list no-lines>
               <ion-item *ngIf="card.ability">
                 <h2 class="danger">
                   {{card.ability.type}}
@@ -68,6 +72,10 @@
             </ion-list>
           </ion-card-content>
         </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 col-md>
         <ion-card>
           <ion-card-content>
             <ion-grid>
@@ -115,6 +123,8 @@
             </ion-grid>
           </ion-card-content>
         </ion-card>
+      </ion-col>
+      <ion-col col-12 col-md>
         <ion-card>
           <ion-card-content>
             <ion-item>
