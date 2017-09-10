@@ -14,6 +14,7 @@ import {Card} from "../../model/card";
 export class CardsProvider {
 
   private baseUrl = 'https://api.pokemontcg.io/v1';
+  // private baseUrl = 'http://localhost:3000';
   private setsUrl = this.baseUrl + '/sets';
   private cardsUrl = this.baseUrl + '/cards';
 
@@ -23,7 +24,7 @@ export class CardsProvider {
 
   public loadSets(): Promise<Set[]> {
     return new Promise((resolve, reject) => {
-      this.http.get(this.setsUrl).map((res: Response) => res.json().sets).subscribe((sets: Set[]) => {
+      this.http.get(this.setsUrl).map((res: Response) => res.json().sets.reverse()).subscribe((sets: Set[]) => {
         resolve(sets);
       });
     });
@@ -35,7 +36,9 @@ export class CardsProvider {
         params: {
           setCode: setCode
         }
-      }).map(res => res.json().cards).subscribe((cards: Card[]) => {
+      }).map(res => res.json().cards.sort((card1: Card, card2: Card) => {
+        return parseInt(card1.number) - parseInt(card2.number);
+      })).subscribe((cards: Card[]) => {
         resolve(cards);
       });
     });

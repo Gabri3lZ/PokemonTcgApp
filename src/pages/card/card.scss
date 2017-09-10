@@ -1,0 +1,18 @@
+page-card {
+  .image {
+    width: 100%;
+  }
+  .inline {
+    display: inline-block;
+  }
+  .right {
+    float: right;
+  }
+  .danger {
+    color: map-get($colors, danger);
+  }
+  p {
+    overflow: hidden;
+    white-space: normal;
+  }
+}

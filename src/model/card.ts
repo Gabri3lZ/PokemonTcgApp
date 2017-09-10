@@ -8,8 +8,18 @@ export class Card {
   id: string;
   name: string;
   nationalPokedexNumber: number;
-  imageUrl: string;
-  imageUrlHiRes: string;
+  // imageUrl: string;
+  get imageUrl(): string {
+    return 'http://localhost:8100/assets/img/mock/card.png';
+  }
+  set imageUrl(url) {
+  }
+  // imageUrlHiRes: string;
+  get imageUrlHiRes(): string {
+    return 'http://localhost:8100/assets/img/mock/card_hires.png';
+  }
+  set imageUrlHiRes(url) {
+  }
   types: string[];
   supertype: string;
   subtype: string;
