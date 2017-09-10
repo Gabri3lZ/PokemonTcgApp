@@ -11,6 +11,9 @@ page-card {
   .danger {
     color: map-get($colors, danger);
   }
+  .secondary {
+    color: map-get($colors, secondary);
+  }
   p {
     overflow: hidden;
     white-space: normal;

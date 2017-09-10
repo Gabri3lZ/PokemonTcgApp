@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{set.name}}</ion-title>
+    <ion-title *ngIf="set">{{set.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -23,7 +23,7 @@
       </ion-segment>
     </ion-item>
   </div>
-  <div>
+  <div *ngIf="set">
     <ion-card>
       <ion-card-content>
         <ion-item>
@@ -46,20 +46,20 @@
       </ion-card-content>
     </ion-card>
   </div>
-  <div [ngSwitch]="view">
+  <div *ngIf="set" [ngSwitch]="view">
     <ion-list *ngSwitchCase="'list'">
       <button ion-item class="card" *ngFor="let card of cards" (click)="itemTapped($event, card)">
         <ion-icon name="leaf" item-start></ion-icon>
         <ion-grid>
           <ion-row>
             <ion-col col-2>
-              <h1 class="number">{{card.number}}</h1>
+              <h2 class="number">{{card.number}}</h2>
             </ion-col>
             <ion-col col-6>
               <h2 class="name">{{card.name}}</h2>
             </ion-col>
             <ion-col col-4>
-              <h2 class="name">{{card.rarity}}</h2>
+              <h2 class="rarity">{{card.rarity}}</h2>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -73,13 +73,13 @@
         <ion-grid>
           <ion-row>
             <ion-col col-2>
-              <h1 class="number">{{card.number}}</h1>
+              <h2 class="number">{{card.number}}</h2>
             </ion-col>
             <ion-col col-6>
               <h2 class="name">{{card.name}}</h2>
             </ion-col>
             <ion-col col-4>
-              <h2 class="name">{{card.rarity}}</h2>
+              <h2 class="rarity">{{card.rarity}}</h2>
             </ion-col>
           </ion-row>
         </ion-grid>

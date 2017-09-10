@@ -3,7 +3,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Set } from "../../model/set";
 import { CardsProvider } from "../../providers/cards/cards";
 
-@IonicPage()
+@IonicPage({
+  name: 'sets-page',
+  segment: 'sets'
+})
 @Component({
   selector: 'page-sets',
   templateUrl: 'sets.html'
@@ -79,7 +82,8 @@ export class SetsPage {
   }
 
   itemTapped(event, set: Set) {
-    this.navCtrl.push('SetPage', {
+    this.navCtrl.push('set-page', {
+      setCode: set.code,
       set: set
     });
   }

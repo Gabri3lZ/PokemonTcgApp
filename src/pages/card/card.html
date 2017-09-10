@@ -3,12 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{card.name}}</ion-title>
+    <ion-title *ngIf="card">{{card.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-grid *ngIf="card">
     <ion-row>
       <ion-col>
         <img class="image" [src]="card.imageUrl"/>
@@ -47,6 +47,22 @@
         <ion-card>
           <ion-card-content>
             <ion-list no-lines>
+              <ion-item *ngIf="card.ancientTrait">
+                <h2 class="secondary">
+                  Ancient Trait
+                </h2>
+                <h2>
+                  {{card.ancientTrait.name}}
+                </h2>
+                <p>
+                  {{card.ancientTrait.text}}
+                </p>
+              </ion-item>
+              <ion-item *ngIf="card.text">
+                <p>
+                  {{card.text}}
+                </p>
+              </ion-item>
               <ion-item *ngIf="card.ability">
                 <h2 class="danger">
                   {{card.ability.type}}
@@ -109,10 +125,10 @@
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <h2>
+                  <h2 *ngIf="set">
                     <a (click)="goBackToSet($event)">{{set.name}}</a>
                   </h2>
-                  <h3>
+                  <h3 *ngIf="set">
                     {{card.number}} / {{set.totalCards}}
                   </h3>
                 </ion-col>

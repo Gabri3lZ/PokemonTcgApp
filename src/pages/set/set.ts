@@ -4,22 +4,34 @@ import {CardsProvider} from "../../providers/cards/cards";
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 
-@IonicPage()
+@IonicPage({
+  name: 'set-page',
+  segment: 'sets/:setCode',
+  defaultHistory: ['sets-page']
+})
 @Component({
   selector: 'page-set',
-  templateUrl: 'set.html',
+  templateUrl: 'set.html'
 })
 export class SetPage {
+  setCode: string;
   set: Set;
   cards: Card[] = [];
   view: string = 'list';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private cardsProvider: CardsProvider) {
+    this.setCode = navParams.get('setCode');
     this.set = navParams.get('set');
 
-    this.cardsProvider.loadCards(this.set.code).then((cards: Card[]) => {
+    this.cardsProvider.loadCards(this.setCode).then((cards: Card[]) => {
       this.cards = cards;
     });
+
+    if (!this.set) {
+      this.cardsProvider.loadSet(this.setCode).then((set: Set) => {
+        this.set = set;
+      });
+    }
   }
 
   ionViewDidLoad() {
@@ -35,7 +47,9 @@ export class SetPage {
   }
 
   itemTapped(event, card: Card) {
-    this.navCtrl.push('CardPage', {
+    this.navCtrl.push('card-page', {
+      cardId: card.id,
+      setCode: this.setCode,
       card: card,
       cards: this.cards,
       set: this.set
