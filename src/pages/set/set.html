@@ -9,17 +9,19 @@
 
 <ion-content>
   <div>
-    <ion-segment [(ngModel)]="view">
-      <ion-segment-button value="list">
-        List
-      </ion-segment-button>
-      <ion-segment-button value="thumbnail">
-        Thumbnails
-      </ion-segment-button>
-      <ion-segment-button value="grid">
-        Grid
-      </ion-segment-button>
-    </ion-segment>
+    <ion-item no-lines>
+      <ion-segment [(ngModel)]="view">
+        <ion-segment-button value="list">
+          List
+        </ion-segment-button>
+        <ion-segment-button value="thumbnail">
+          Thumbnails
+        </ion-segment-button>
+        <ion-segment-button value="grid">
+          Grid
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
   </div>
   <div>
     <ion-card>
