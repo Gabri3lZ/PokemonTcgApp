@@ -49,17 +49,20 @@
   <div *ngIf="set" [ngSwitch]="view">
     <ion-list *ngSwitchCase="'list'">
       <button ion-item class="card" *ngFor="let card of cards" (click)="itemTapped($event, card)">
-        <ion-icon name="leaf" item-start></ion-icon>
         <ion-grid>
           <ion-row>
             <ion-col col-2>
               <h2 class="number">{{card.number}}</h2>
             </ion-col>
-            <ion-col col-6>
+            <ion-col col-7>
               <h2 class="name">{{card.name}}</h2>
             </ion-col>
-            <ion-col col-4>
-              <h2 class="rarity">{{card.rarity}}</h2>
+            <ion-col col-1>
+              <h2 class="rarity">{{card.rarity.substr(0, 1)}}</h2>
+            </ion-col>
+            <ion-col col-2>
+              <ion-icon class="energy" [name]="'tcg-' + type.toLowerCase()" *ngFor="let type of card.types"></ion-icon>
+              <ion-icon class="energy" name="blank" *ngIf="!card.types || card.types.length === 0"> </ion-icon>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -75,11 +78,15 @@
             <ion-col col-2>
               <h2 class="number">{{card.number}}</h2>
             </ion-col>
-            <ion-col col-6>
+            <ion-col col-7>
               <h2 class="name">{{card.name}}</h2>
             </ion-col>
-            <ion-col col-4>
-              <h2 class="rarity">{{card.rarity}}</h2>
+            <ion-col col-1>
+              <h2 class="rarity">{{card.rarity.substr(0, 1)}}</h2>
+            </ion-col>
+            <ion-col col-2>
+              <ion-icon class="energy" [name]="'tcg-' + type.toLowerCase()" *ngFor="let type of card.types"></ion-icon>
+              <ion-icon class="energy" name="blank" *ngIf="!card.types || card.types.length === 0"> </ion-icon>
             </ion-col>
           </ion-row>
         </ion-grid>

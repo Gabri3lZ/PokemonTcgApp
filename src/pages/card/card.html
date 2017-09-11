@@ -8,10 +8,12 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid *ngIf="card">
+  <ion-grid no-padding *ngIf="card">
     <ion-row>
       <ion-col>
-        <img class="image" [src]="card.imageUrl"/>
+        <ion-card>
+          <img class="image" [src]="card.imageUrl"/>
+        </ion-card>
       </ion-col>
     </ion-row>
     <ion-row>

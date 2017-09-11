@@ -4,5 +4,47 @@ page-set {
       height: 100px;
       width: auto;
     }
+
+    .energy {
+      border-radius: 50%;
+      margin-right: 0.2em;
+      width: 1.3em;
+      height: 1.3em;
+      text-align: center;
+    }
+
+    .energy[class*="tcg-fire"] {
+      background-color: map-get($energies, fire);
+    }
+    .energy[class*="tcg-grass"] {
+      background-color: map-get($energies, grass);
+    }
+    .energy[class*="tcg-water"] {
+      background-color: map-get($energies, water);
+    }
+    .energy[class*="tcg-fairy"] {
+      background-color: map-get($energies, fairy);
+    }
+    .energy[class*="tcg-lightning"] {
+      background-color: map-get($energies, lightning);
+    }
+    .energy[class*="tcg-psychic"] {
+      background-color: map-get($energies, psychic);
+    }
+    .energy[class*="tcg-fighting"] {
+      background-color: map-get($energies, fighting);
+    }
+    .energy[class*="tcg-darkness"] {
+      background-color: map-get($energies, darkness);
+    }
+    .energy[class*="tcg-metal"] {
+      background-color: map-get($energies, metal);
+    }
+    .energy[class*="tcg-colorless"] {
+      background-color: map-get($energies, colorless);
+    }
+    .energy[class*="tcg-dragon"] {
+      background-color: map-get($energies, dragon);
+    }
   }
 }

@@ -41,6 +41,20 @@ $colors: (
   dark:       #222
 );
 
+$energies: (
+  fire:       #c62c22,
+  grass:      #154a12,
+  water:      #006599,
+  fairy:      #d90245,
+  lightning:  #efc83c,
+  psychic:    #594276,
+  fighting:   #922a05,
+  darkness:   #586a76,
+  metal:      #898582,
+  colorless:  #f5f5f5,
+  dragon:     #d2a001
+);
+
 
 // App iOS Variables
 // --------------------------------------------------
@@ -78,7 +92,11 @@ $colors: (
 // The premium icon font for Ionic. For more info, please see:
 // http://ionicframework.com/docs/ionicons/
 
-@import "ionic.ionicons";
+$ionicons-font-path: "../assets/fonts";
+
+// In order to make icons work and not break ionic icons, change ionic.ionicons to ionicons
+// @import "ionic.ionicons";
+@import "ionicons";
 
 
 // Fonts
