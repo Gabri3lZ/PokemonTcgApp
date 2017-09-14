@@ -61,8 +61,7 @@
               <h2 class="rarity">{{card.rarity.substr(0, 1)}}</h2>
             </ion-col>
             <ion-col col-2>
-              <ion-icon class="energy" [name]="'tcg-' + type.toLowerCase()" *ngFor="let type of card.types"></ion-icon>
-              <ion-icon class="energy" name="blank" *ngIf="!card.types || card.types.length === 0"> </ion-icon>
+              <i [class]="'energy-sm ' + type.toLowerCase() + '-sm'" *ngFor="let type of card.types"></i>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -75,18 +74,14 @@
         </ion-thumbnail>
         <ion-grid>
           <ion-row>
-            <ion-col col-2>
-              <h2 class="number">{{card.number}}</h2>
-            </ion-col>
-            <ion-col col-7>
+            <ion-col col-8>
               <h2 class="name">{{card.name}}</h2>
             </ion-col>
             <ion-col col-1>
               <h2 class="rarity">{{card.rarity.substr(0, 1)}}</h2>
             </ion-col>
-            <ion-col col-2>
-              <ion-icon class="energy" [name]="'tcg-' + type.toLowerCase()" *ngFor="let type of card.types"></ion-icon>
-              <ion-icon class="energy" name="blank" *ngIf="!card.types || card.types.length === 0"> </ion-icon>
+            <ion-col col-3>
+              <i [class]="'energy-sm ' + type.toLowerCase() + '-sm'" *ngFor="let type of card.types"></i>
             </ion-col>
           </ion-row>
         </ion-grid>
