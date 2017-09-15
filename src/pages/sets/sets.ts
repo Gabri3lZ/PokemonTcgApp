@@ -32,55 +32,6 @@ export class SetsPage {
     });
   }
 
-  getImageUrlMock(set: Set): string {
-    return 'http://localhost:8100/assets/img/mock/sm02-slider-logo-en.png';
-  }
-
-  getImageUrl(set: Set): string {
-    let setNumber = this.getSetNumber(set.code);
-    let seriesCode = this.getSeriesCode(set.code);
-
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
-    url += seriesCode + '_series/';
-    url += seriesCode + setNumber + '/';
-    url += seriesCode + setNumber + '-slider-logo-en.png';
-    return url;
-  }
-
-  getImageUrlOld(set: Set): string {
-    let setNumber = this.getSetNumber(set.code);
-    let seriesCode = this.getSeriesCode(set.code);
-
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
-    url += seriesCode + '_series/';
-    url += seriesCode + setNumber + '/';
-    url += seriesCode + setNumber + '_slider_logo_en.png';
-    return url;
-  }
-
-  getImageUrlHiRes(set: Set) {
-    let setNumber = this.getSetNumber(set.code);
-    let seriesCode = this.getSeriesCode(set.code);
-
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
-    url += seriesCode + '_series/';
-    url += seriesCode + setNumber + '/';
-    url += seriesCode + setNumber + '_logo_169_en.png';
-    return url;
-  }
-
-  private getSetNumber(setCode: string) {
-    if (setCode.search(/[0-9]/g) > 0) {
-      return ('0' + setCode.substring(setCode.search(/[0-9]/g), setCode.length)).slice(-2);
-    } else {
-      return '';
-    }
-  }
-
-  private getSeriesCode(setCode: string) {
-    return setCode.replace(/[0-9]*/g, '');
-  }
-
   itemTapped(event, set: Set) {
     this.navCtrl.push('set-page', {
       setCode: set.code,

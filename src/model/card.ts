@@ -8,18 +8,8 @@ export class Card {
   id: string;
   name: string;
   nationalPokedexNumber: number;
-  // imageUrl: string;
-  get imageUrl(): string {
-    return 'http://localhost:8100/assets/img/mock/card.png';
-  }
-  set imageUrl(url) {
-  }
-  // imageUrlHiRes: string;
-  get imageUrlHiRes(): string {
-    return 'http://localhost:8100/assets/img/mock/card_hires.png';
-  }
-  set imageUrlHiRes(url) {
-  }
+  imageUrl: string;
+  imageUrlHiRes: string;
   types: string[];
   supertype: string;
   subtype: string;
@@ -38,4 +28,14 @@ export class Card {
   attacks: Attack[];
   resistances: Resistance[];
   weaknesses: Weakness[];
+
+  constructor(card: Card) {
+    if (card) {
+      for (let key in card) {
+        if (card.hasOwnProperty(key)) {
+          this[key] = card[key];
+        }
+      }
+    }
+  }
 }

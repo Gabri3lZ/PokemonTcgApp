@@ -1,0 +1,117 @@
+.energy {
+  background-image: url(../assets/img/energy-types.png);
+  margin-right: 5px;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+}
+
+.grass {
+  background-position: -25px -50px;
+}
+.fire {
+  background-position: 0px 0px;
+}
+.water {
+  background-position: -75px -50px;
+}
+.lightning {
+  background-position: -50px -50px;
+}
+.psychic {
+  background-position: -75px -25px;
+}
+.fighting {
+  background-position: -50px -25px;
+}
+.darkness {
+  background-position: 0px -50px;
+}
+.metal {
+  background-position: -75px 0px;
+}
+.colorless {
+  background-position: -25px 0px;
+}
+.fairy {
+  background-position: -50px 0px;
+}
+.dragon {
+  background-position: 0px -25px;
+}
+
+.energy-sm {
+  background-image: url(../assets/img/energy-types-sm.png);
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.grass-sm {
+  background-position: -20px -40px;
+}
+.fire-sm {
+  background-position: 0px 0px;
+}
+.water-sm {
+  background-position: -60px -40px;
+}
+.lightning-sm {
+  background-position: -40px -40px;
+}
+.psychic-sm {
+  background-position: -60px -20px;
+}
+.fighting-sm {
+  background-position: -40px -20px;
+}
+.darkness-sm {
+  background-position: 0px -40px;
+}
+.metal-sm {
+  background-position: -60px 0px;
+}
+.colorless-sm {
+  background-position: -20px 0px;
+}
+.fairy-sm {
+  background-position: -40px 0px;
+}
+.dragon-sm {
+  background-position: 0px -20px;
+}
+
+.energy[class*="tcg-fire"] {
+  background-color: map-get($energies, fire);
+}
+.energy[class*="tcg-grass"] {
+  background-color: map-get($energies, grass);
+}
+.energy[class*="tcg-water"] {
+  background-color: map-get($energies, water);
+}
+.energy[class*="tcg-fairy"] {
+  background-color: map-get($energies, fairy);
+}
+.energy[class*="tcg-lightning"] {
+  background-color: map-get($energies, lightning);
+}
+.energy[class*="tcg-psychic"] {
+  background-color: map-get($energies, psychic);
+}
+.energy[class*="tcg-fighting"] {
+  background-color: map-get($energies, fighting);
+}
+.energy[class*="tcg-darkness"] {
+  background-color: map-get($energies, darkness);
+}
+.energy[class*="tcg-metal"] {
+  background-color: map-get($energies, metal);
+}
+.energy[class*="tcg-colorless"] {
+  background-color: map-get($energies, colorless);
+}
+.energy[class*="tcg-dragon"] {
+  background-color: map-get($energies, dragon);
+}

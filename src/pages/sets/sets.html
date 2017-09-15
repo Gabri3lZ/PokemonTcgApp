@@ -11,10 +11,11 @@
   <ion-item-group *ngFor="let serie of series">
     <ion-item-divider color="light">{{serie}}</ion-item-divider>
     <ion-card class="set" *ngFor="let set of getSets(serie)" (click)="itemTapped($event, set)">
-      <img class="image" [src]="getImageUrl(set)"/>
+      <img class="image" [src]="set.imageUrl"/>
       <ion-card-content>
         <ion-card-title>
           {{set.name}}
+          <img class="set-symbol" [src]="set.symbolUrl"/>
         </ion-card-title>
         <p>
           {{set.series}}

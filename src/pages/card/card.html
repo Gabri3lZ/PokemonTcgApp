@@ -27,7 +27,7 @@
                     {{card.name}}
                   </ion-col>
                   <ion-col col-auto>
-                    <h2 class="inline">HP</h2> {{card.hp}}
+                    <h2 class="inline" *ngIf="card.hp">HP</h2> {{card.hp}}
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -111,18 +111,18 @@
               <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
                 <ion-col col-4>
                   <div *ngFor="let weakness of card.weaknesses">
-                    <h3 class="inline">{{weakness.type}}</h3>
+                    <i [class]="'energy-sm ' + weakness.type.toLowerCase() + '-sm'"></i>
                     <h3 class="inline">{{weakness.value}}</h3>
                   </div>
                 </ion-col>
                 <ion-col col-4>
                   <div *ngFor="let resistance of card.resistances">
-                    <h3 class="inline">{{resistance.type}}</h3>
+                    <i [class]="'energy-sm ' + resistance.type.toLowerCase() + '-sm'"></i>
                     <h3 class="inline">{{resistance.value}}</h3>
                   </div>
                 </ion-col>
                 <ion-col col-4>
-                  <h3 class="inline" *ngFor="let cost of card.retreatCost">o</h3>
+                  <i class="energy-sm colorless-sm" *ngFor="let cost of card.retreatCost"></i>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -135,7 +135,7 @@
                   </h3>
                 </ion-col>
                 <ion-col col-auto>
-                  <ion-icon name="leaf"></ion-icon>
+                  <img *ngIf="set" class="set-symbol" [src]="set.symbolUrl" />
                 </ion-col>
               </ion-row>
             </ion-grid>
