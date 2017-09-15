@@ -13,8 +13,7 @@ export class Set {
   imageUrl: string;
   imageUrlOld: string;
   imageUrlHiRes: string;
-  iconUrl: string;
-  iconUrlHiRes: string;
+  imageUrlMock: string;
 
   constructor(set: Set) {
     if (set) {
@@ -27,8 +26,7 @@ export class Set {
       this.imageUrl = this.getImageUrl();
       this.imageUrlOld = this.getImageUrlOld();
       this.imageUrlHiRes = this.getImageUrlHiRes();
-      this.iconUrl = this.getIconUrl();
-      this.iconUrlHiRes = this.getIconUrlHiRes();
+      this.imageUrlMock = this.getImageUrlMock();
     }
   }
 
@@ -67,18 +65,6 @@ export class Set {
 
   private getImageUrlMock(): string {
     return 'http://localhost:8100/assets/img/mock/sm02-slider-logo-en.png';
-  }
-
-  private getIconUrl() {
-    let url: string = 'https://assets.pokemon.com/assets/cms/img/tcg/expansion-symbols/';
-    url += this.code + '-expansion-symbol.png';
-    return url;
-  }
-
-  private getIconUrlHiRes() {
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/_symbols/expansion_symbol_38x38/';
-    url += this.code + '_symbol_38x38.png';
-    return url;
   }
 
   private getSetNumber() {
