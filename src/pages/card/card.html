@@ -10,6 +10,7 @@
 <ion-content>
   <div *ngIf="card">
     <ion-card>
+      <div class="image-background" [style.background-image]="'url(' + card.imageUrl + ')'"></div>
       <img class="image" [src]="card.imageUrl"/>
     </ion-card>
     <ion-card>

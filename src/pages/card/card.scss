@@ -2,7 +2,8 @@ page-card {
   .image {
     width: auto;
     display: block;
-    margin: auto;
+    margin: 15px auto;
+    padding: 15px 0px;
   }
   .set-symbol {
     height: 25px;
@@ -40,5 +41,19 @@ page-card {
 
   ion-card:nth-child(1) {
     box-shadow: none;
+    background: none;
+    position: relative;
+    overflow: inherit;
+  }
+
+  ion-card:nth-child(1) .image-background {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-size: 111%;
+    background-position-x: -20px;
+    background-position-y: -20px;
+    position: absolute;
+    filter: opacity(0.8) blur(5px);
   }
 }
