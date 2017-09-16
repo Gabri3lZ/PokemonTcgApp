@@ -1,6 +1,8 @@
 page-card {
   .image {
     width: auto;
+    display: block;
+    margin: auto;
   }
   .set-symbol {
     height: 25px;
@@ -25,5 +27,18 @@ page-card {
   p {
     overflow: hidden;
     white-space: normal;
+  }
+  ion-card:nth-child(even) ion-item {
+    background-color: #F2F2F2 !important;
+    margin-bottom: -1px !important;
+  }
+  ion-card:nth-child(2),
+  ion-card:nth-child(2) ion-card-content,
+  ion-card:nth-child(2) ion-card-content ion-card-title {
+    background-color: #a4a4a4 !important;
+  }
+
+  ion-card:nth-child(1) {
+    box-shadow: none;
   }
 }
