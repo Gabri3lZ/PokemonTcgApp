@@ -61,7 +61,7 @@
               <h2 class="rarity">{{card.rarity.substr(0, 1)}}</h2>
             </ion-col>
             <ion-col col-2>
-              <i [class]="'energy-sm ' + type.toLowerCase() + '-sm'" *ngFor="let type of card.types"></i>
+              <i [class]="'energy-sm energy-left ' + type.toLowerCase() + '-sm'" *ngFor="let type of card.types"></i>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -81,7 +81,7 @@
               <h2 class="rarity">{{card.rarity.substr(0, 1)}}</h2>
             </ion-col>
             <ion-col col-3>
-              <i [class]="'energy-sm ' + type.toLowerCase() + '-sm'" *ngFor="let type of card.types"></i>
+              <i [class]="'energy-sm energy-left ' + type.toLowerCase() + '-sm'" *ngFor="let type of card.types"></i>
             </ion-col>
           </ion-row>
         </ion-grid>

@@ -28,6 +28,7 @@
                   </ion-col>
                   <ion-col col-auto>
                     <h2 class="inline" *ngIf="card.hp">HP</h2> {{card.hp}}
+                    <i *ngFor="let type of card.types" [class]="'energy-sm energy-right ' + type.toLowerCase() + '-sm'"></i>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -77,6 +78,7 @@
                 </p>
               </ion-item>
               <ion-item *ngFor="let attack of card.attacks">
+                <i *ngFor="let energyCost of attack.cost" [class]="'energy-sm energy-left ' + energyCost.toLowerCase() + '-sm'"></i>
                 <h2 class="inline">
                   {{attack.name}}
                 </h2>
@@ -111,18 +113,18 @@
               <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
                 <ion-col col-4>
                   <div *ngFor="let weakness of card.weaknesses">
-                    <i [class]="'energy-sm ' + weakness.type.toLowerCase() + '-sm'"></i>
+                    <i [class]="'energy-sm energy-left ' + weakness.type.toLowerCase() + '-sm'"></i>
                     <h3 class="inline">{{weakness.value}}</h3>
                   </div>
                 </ion-col>
                 <ion-col col-4>
                   <div *ngFor="let resistance of card.resistances">
-                    <i [class]="'energy-sm ' + resistance.type.toLowerCase() + '-sm'"></i>
+                    <i [class]="'energy-sm energy-left ' + resistance.type.toLowerCase() + '-sm'"></i>
                     <h3 class="inline">{{resistance.value}}</h3>
                   </div>
                 </ion-col>
                 <ion-col col-4>
-                  <i class="energy-sm colorless-sm" *ngFor="let cost of card.retreatCost"></i>
+                  <i class="energy-sm energy-left colorless-sm" *ngFor="let cost of card.retreatCost"></i>
                 </ion-col>
               </ion-row>
               <ion-row>
