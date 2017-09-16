@@ -89,51 +89,49 @@
       <ion-card-content no-padding>
         <ion-grid no-padding>
           <ion-item>
-          <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
-            <ion-col col-4>
-              <h2>Weakness</h2>
-            </ion-col>
-            <ion-col col-4>
-              <h2>Resistance</h2>
-            </ion-col>
-            <ion-col col-4>
-              <h2>Retreat Cost</h2>
-            </ion-col>
-          </ion-row>
+            <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
+              <ion-col col-4>
+                <h2>Weakness</h2>
+              </ion-col>
+              <ion-col col-4>
+                <h2>Resistance</h2>
+              </ion-col>
+              <ion-col col-4>
+                <h2>Retreat Cost</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
+              <ion-col col-4>
+                <div *ngFor="let weakness of card.weaknesses">
+                  <i [class]="'energy-sm energy-left ' + weakness.type.toLowerCase() + '-sm'"></i>
+                  <h3 class="inline">{{weakness.value}}</h3>
+                </div>
+              </ion-col>
+              <ion-col col-4>
+                <div *ngFor="let resistance of card.resistances">
+                  <i [class]="'energy-sm energy-left ' + resistance.type.toLowerCase() + '-sm'"></i>
+                  <h3 class="inline">{{resistance.value}}</h3>
+                </div>
+              </ion-col>
+              <ion-col col-4>
+                <i class="energy-sm energy-left colorless-sm" *ngFor="let cost of card.retreatCost"></i>
+              </ion-col>
+            </ion-row>
           </ion-item>
           <ion-item>
-          <ion-row *ngIf="card.weaknesses || card.resistances || card.retreatCost">
-            <ion-col col-4>
-              <div *ngFor="let weakness of card.weaknesses">
-                <i [class]="'energy-sm energy-left ' + weakness.type.toLowerCase() + '-sm'"></i>
-                <h3 class="inline">{{weakness.value}}</h3>
-              </div>
-            </ion-col>
-            <ion-col col-4>
-              <div *ngFor="let resistance of card.resistances">
-                <i [class]="'energy-sm energy-left ' + resistance.type.toLowerCase() + '-sm'"></i>
-                <h3 class="inline">{{resistance.value}}</h3>
-              </div>
-            </ion-col>
-            <ion-col col-4>
-              <i class="energy-sm energy-left colorless-sm" *ngFor="let cost of card.retreatCost"></i>
-            </ion-col>
-          </ion-row>
-          </ion-item>
-          <ion-item>
-          <ion-row>
-            <ion-col>
-              <h2 *ngIf="set">
-                <a (click)="goBackToSet($event)">{{set.name}}</a>
-              </h2>
-              <h3 *ngIf="set">
-                {{card.number}} / {{set.totalCards}}
-              </h3>
-            </ion-col>
-            <ion-col col-auto>
-              <img *ngIf="set" class="set-symbol" [src]="set.symbolUrl" />
-            </ion-col>
-          </ion-row>
+            <ion-row>
+              <ion-col>
+                <h2 *ngIf="set">
+                  <a (click)="goBackToSet($event)">{{set.name}}</a>
+                </h2>
+                <h3 *ngIf="set">
+                  {{card.number}} / {{set.totalCards}}
+                </h3>
+              </ion-col>
+              <ion-col col-auto>
+                <img *ngIf="set" class="set-symbol" [src]="set.symbolUrl" />
+              </ion-col>
+            </ion-row>
           </ion-item>
         </ion-grid>
       </ion-card-content>
