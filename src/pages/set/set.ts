@@ -23,6 +23,18 @@ export class SetPage {
     this.setCode = navParams.get('setCode');
     this.set = navParams.get('set');
 
+    if (this.navCtrl.last()) {
+      if (!this.setCode) {
+        this.setCode = this.navCtrl.last().getNavParams().get('setCode');
+        this.navCtrl.getPrevious().data = {
+          setCode: this.setCode
+        };
+      }
+      if (!this.set) {
+        this.set = this.navCtrl.last().getNavParams().get('set');
+      }
+    }
+
     this.cardsProvider.loadCards(this.setCode).then((cards: Card[]) => {
       this.cards = cards;
     });
@@ -32,10 +44,6 @@ export class SetPage {
         this.set = set;
       });
     }
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SetPage');
   }
 
   getIndexArray(devider: number = 1): number[] {

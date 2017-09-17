@@ -7,7 +7,7 @@ import {CardsProvider} from "../../providers/cards/cards";
 @IonicPage({
   name: 'card-page',
   segment: 'sets/:setCode/:cardId',
-  defaultHistory: ['sets-page']
+  defaultHistory: ['sets-page', 'set-page']
 })
 @Component({
   selector: 'page-card',
@@ -39,10 +39,6 @@ export class CardPage {
         this.set = set;
       });
     }
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CardPage');
   }
 
   goBackToSet(event) {
