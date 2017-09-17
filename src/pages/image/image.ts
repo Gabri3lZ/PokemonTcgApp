@@ -15,17 +15,17 @@ export class ImagePage implements AfterViewInit, OnDestroy {
   content: Content;
   imageUrl: string;
 
-  private scrollEndSubscription: Subscription;
+  private scrollSubscription: Subscription;
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
     this.imageUrl = navParams.get('imageUrl');
   }
 
   ngAfterViewInit() {
-    this.scrollEndSubscription = this.content.ionScrollEnd.subscribe((event) => {
+    this.scrollSubscription = this.content.ionScroll.subscribe((event) => {
       let maxScrollTop = event.scrollHeight - event.contentHeight;
       let scrollTop = event.scrollTop;
-      let tolerance = Math.max(event.contentHeight, event.contentWidth) / 10;
+      let tolerance = Math.max(event.contentHeight, event.contentWidth) / 5;
       if ((scrollTop - maxScrollTop) > tolerance || scrollTop < -tolerance) {
         this.close();
       }
@@ -33,7 +33,7 @@ export class ImagePage implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.scrollEndSubscription.unsubscribe();
+    this.scrollSubscription.unsubscribe();
   }
 
   close() {
