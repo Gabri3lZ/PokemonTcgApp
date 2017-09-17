@@ -9,6 +9,7 @@ page-image {
       margin: -25px;
 
       img {
+        border-radius: 10px;
         box-shadow: $modal-inset-box-shadow;
         margin: auto;
         max-height: 100%;
