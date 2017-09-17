@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
+import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 import {CardsProvider} from "../../providers/cards/cards";
@@ -21,7 +21,11 @@ export class CardPage {
   cards: Card[];
   set: Set;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cardsProvider: CardsProvider) {
+  backdropActive: boolean = false;
+  backdropVidible: boolean = false;
+
+  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams,
+              private cardsProvider: CardsProvider) {
     this.cardId = navParams.get('cardId');
     this.setCode = navParams.get('setCode');
     this.card = navParams.get('card');
@@ -56,6 +60,24 @@ export class CardPage {
         set: this.set
       });
     }
+  }
+
+  imageTapped(event) {
+    this.backdropActive = true;
+
+    setTimeout(() => {
+      let modal = this.modalCtrl.create('image-page', {
+        imageUrl: this.card.imageUrlHiRes
+      }, {cssClass: 'image-modal'});
+      this.backdropVidible = true;
+      modal.onWillDismiss(() => {
+        this.backdropVidible = false;
+      });
+      modal.onDidDismiss(() => {
+        this.backdropActive = false;
+      });
+      modal.present();
+    });
   }
 
 }

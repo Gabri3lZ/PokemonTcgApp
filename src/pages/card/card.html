@@ -1,3 +1,5 @@
+<backdrop [class.visible]="backdropVidible" *ngIf="backdropActive"></backdrop>
+
 <ion-header>
   <ion-navbar>
     <ion-title *ngIf="card">{{card.name}}</ion-title>
@@ -11,7 +13,7 @@
   <div *ngIf="card">
     <ion-card>
       <div class="image-background" [style.background-image]="'url(' + card.imageUrl + ')'"></div>
-      <img class="image" [src]="card.imageUrl"/>
+      <img class="image" [src]="card.imageUrl" (click)="imageTapped($event)"/>
     </ion-card>
     <ion-card>
       <ion-card-content no-padding>

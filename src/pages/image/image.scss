@@ -1,0 +1,18 @@
+page-image {
+  ion-content {
+    background: none !important;
+
+    .container {
+      height: 100%;
+      display: flex;
+      padding: 25px 35px;
+      margin: -25px;
+
+      img {
+        box-shadow: $modal-inset-box-shadow;
+        margin: auto;
+        max-height: 100%;
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CardsProvider } from '../providers/cards/cards';
 import { HttpModule } from "@angular/http";
+import { ComponentsModule } from "../components/components.module";
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { HttpModule } from "@angular/http";
   imports: [
     BrowserModule,
     HttpModule,
+    ComponentsModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],

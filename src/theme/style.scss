@@ -123,3 +123,9 @@
 .energy[class*="tcg-dragon"] {
   background-color: map-get($energies, dragon);
 }
+
+.image-modal {
+  .modal-wrapper {
+    box-shadow: none;
+  }
+}
