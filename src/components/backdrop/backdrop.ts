@@ -6,11 +6,7 @@ import { Component } from '@angular/core';
 })
 export class BackdropComponent {
 
-  text: string;
-
   constructor() {
-    console.log('Hello BackdropComponent Component');
-    this.text = 'Hello World';
   }
 
 }

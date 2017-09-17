@@ -13,7 +13,6 @@ export class CardsProvider {
   private cardsUrl = this.baseUrl + '/cards';
 
   constructor(public http: Http) {
-    console.log('Hello CardsProvider Provider');
   }
 
   public loadSets(): Promise<Set[]> {
