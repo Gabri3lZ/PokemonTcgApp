@@ -1,9 +1,9 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <ion-title *ngIf="set">{{set.name}}</ion-title>
+    <button ion-button menuToggle end>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="set">{{set.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
