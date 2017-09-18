@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BackdropComponent } from './backdrop/backdrop';
+import { CommonModule } from "@angular/common";
 
 @NgModule({
 	declarations: [BackdropComponent],
-	imports: [],
+	imports: [CommonModule],
 	exports: [BackdropComponent],
   entryComponents: [
     BackdropComponent

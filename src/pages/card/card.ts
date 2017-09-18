@@ -3,6 +3,7 @@ import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angula
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 import {CardsProvider} from "../../providers/cards/cards";
+import {EventsProvider} from "../../providers/events/events";
 
 @IonicPage({
   name: 'card-page',
@@ -21,11 +22,8 @@ export class CardPage {
   cards: Card[];
   set: Set;
 
-  backdropActive: boolean = false;
-  backdropVidible: boolean = false;
-
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams,
-              private cardsProvider: CardsProvider) {
+              private cardsProvider: CardsProvider, private eventsProvider: EventsProvider) {
     this.cardId = navParams.get('cardId');
     this.setCode = navParams.get('setCode');
     this.card = navParams.get('card');
@@ -63,18 +61,18 @@ export class CardPage {
   }
 
   imageTapped(event) {
-    this.backdropActive = true;
+    this.eventsProvider.toggleBackdropActive.emit(true);
 
     setTimeout(() => {
       let modal = this.modalCtrl.create('image-page', {
         imageUrl: this.card.imageUrlHiRes
       }, {cssClass: 'image-modal'});
-      this.backdropVidible = true;
+      this.eventsProvider.toggleBackdropVisible.emit(true);
       modal.onWillDismiss(() => {
-        this.backdropVidible = false;
+        this.eventsProvider.toggleBackdropVisible.emit(false);
       });
       modal.onDidDismiss(() => {
-        this.backdropActive = false;
+        this.eventsProvider.toggleBackdropActive.emit(false);
       });
       modal.present();
     });

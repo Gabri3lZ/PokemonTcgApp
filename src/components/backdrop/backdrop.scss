@@ -1,14 +1,16 @@
 backdrop {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background: none;
-  transition: background 0.25s ease-in;
-  z-index: 15;
-}
-backdrop.visible {
-  background: rgba(0, 0, 0, 0.4);
-  transition: all 0.25s ease-in;
+  div {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: none;
+    transition: background 0.25s ease-in;
+    z-index: 15;
+  }
+  div.visible {
+    background: rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease-in;
+  }
 }

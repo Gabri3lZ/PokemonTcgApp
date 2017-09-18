@@ -10,6 +10,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { CardsProvider } from '../providers/cards/cards';
 import { HttpModule } from "@angular/http";
 import { ComponentsModule } from "../components/components.module";
+import { EventsProvider } from '../providers/events/events';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ComponentsModule } from "../components/components.module";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    CardsProvider
+    CardsProvider,
+    EventsProvider
   ]
 })
 export class AppModule {}

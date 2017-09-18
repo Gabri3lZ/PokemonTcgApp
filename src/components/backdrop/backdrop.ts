@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {EventsProvider} from "../../providers/events/events";
 
 @Component({
   selector: 'backdrop',
@@ -6,7 +7,17 @@ import { Component } from '@angular/core';
 })
 export class BackdropComponent {
 
-  constructor() {
+  backdropActive: boolean = false;
+  backdropVidible: boolean = false;
+
+  constructor(private eventsProvider: EventsProvider) {
+    this.eventsProvider.toggleBackdropActive.subscribe((value) => {
+      this.backdropActive = value;
+    });
+
+    this.eventsProvider.toggleBackdropVisible.subscribe((value) => {
+      this.backdropVidible = value;
+    });
   }
 
 }
