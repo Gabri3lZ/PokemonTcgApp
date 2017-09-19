@@ -35,12 +35,12 @@ export class SetPage {
       }
     }
 
-    this.cardsProvider.loadCards(this.setCode).then((cards: Card[]) => {
+    this.cardsProvider.getCardsFromStorage(this.setCode).then((cards: Card[]) => {
       this.cards = cards;
     });
 
     if (!this.set) {
-      this.cardsProvider.loadSet(this.setCode).then((set: Set) => {
+      this.cardsProvider.getSetFromStorage(this.setCode).then((set: Set) => {
         this.set = set;
       });
     }

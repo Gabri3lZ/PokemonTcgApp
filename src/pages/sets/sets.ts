@@ -16,7 +16,7 @@ export class SetsPage {
   series: string[] = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private cardsProvider: CardsProvider) {
-    this.cardsProvider.loadSets().then((sets: Set[]) => {
+    this.cardsProvider.getSetsFromStorage().then((sets: Set[]) => {
       this.sets = sets;
       for (let set of sets) {
         if (this.series.indexOf(set.series) < 0) {

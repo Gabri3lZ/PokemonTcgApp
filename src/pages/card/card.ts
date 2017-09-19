@@ -31,13 +31,13 @@ export class CardPage {
     this.set = navParams.get('set');
 
     if (!this.card) {
-      this.cardsProvider.loadCard(this.cardId).then((card: Card) => {
+      this.cardsProvider.getCardFromStorage(this.setCode, this.cardId).then((card: Card) => {
         this.card = card;
       });
     }
 
     if (!this.set) {
-      this.cardsProvider.loadSet(this.setCode).then((set: Set) => {
+      this.cardsProvider.getSetFromStorage(this.setCode).then((set: Set) => {
         this.set = set;
       });
     }

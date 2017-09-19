@@ -11,6 +11,7 @@ import { CardsProvider } from '../providers/cards/cards';
 import { HttpModule } from "@angular/http";
 import { ComponentsModule } from "../components/components.module";
 import { EventsProvider } from '../providers/events/events';
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { EventsProvider } from '../providers/events/events';
     HttpModule,
     ComponentsModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,18 +1,114 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Set} from "../../model/set";
 import {Card} from "../../model/card";
+import {Storage} from "@ionic/storage";
 
 @Injectable()
 export class CardsProvider {
+
+  public cardsInitialized: EventEmitter<null> = new EventEmitter<null>();
 
   private baseUrl = 'https://api.pokemontcg.io/v1';
   // private baseUrl = 'http://localhost:3000';
   private setsUrl = this.baseUrl + '/sets';
   private cardsUrl = this.baseUrl + '/cards';
 
-  constructor(public http: Http) {
+  constructor(public http: Http, private storage: Storage) {
+  }
+
+  public init(): Promise<null> {
+    return new Promise((resolve, reject) => {
+      this.initSets().then((sets: Set[]) => {
+        let counter = 0;
+        for (let set of sets) {
+          this.initCards(set.code).then(() => {
+            counter++;
+            if (counter === sets.length) {
+              this.cardsInitialized.emit();
+              resolve();
+            }
+          })
+        }
+      });
+    });
+  }
+
+  public initSets(): Promise<Set[]> {
+    return new Promise((resolve, reject) => {
+      this.getSetsFromStorage().then((sets: Set[]) => {
+        if (sets) {
+          resolve(sets);
+        } else {
+          this.storeSets().then((sets: Set[]) => {
+            resolve(sets);
+          });
+        }
+      });
+    });
+  }
+
+  public initCards(setCode: string): Promise<Card[]> {
+    return new Promise((resolve, reject) => {
+      this.getCardsFromStorage(setCode).then((cards: Card[]) => {
+        if (cards) {
+          resolve(cards);
+        } else {
+          this.storeCards(setCode).then((cards: Card[]) => {
+            resolve(cards);
+          });
+        }
+      });
+    });
+  }
+
+  public storeSets(): Promise<Set[]> {
+    return new Promise((resolve, reject) => {
+      this.loadSets().then((sets: Set[]) => {
+        this.storage.set('sets', sets);
+        resolve(sets);
+      });
+    });
+  }
+
+  public storeCards(setCode: string): Promise<Card[]> {
+    return new Promise((resolve, reject) => {
+      this.loadCards(setCode).then((cards: Card[]) => {
+        this.storage.set(setCode, cards);
+        resolve(cards);
+      });
+    });
+  }
+
+  public getSetsFromStorage(): Promise<Set[]> {
+    return this.storage.get('sets');
+  }
+
+  public getSetFromStorage(setCode: string): Promise<Set> {
+    return new Promise((resolve, reject) => {
+      this.getSetsFromStorage().then((sets: Set[]) => {
+        let set = sets.find((set: Set) => {
+          return set.code === setCode;
+        });
+        resolve(set);
+      });
+    });
+  }
+
+  public getCardsFromStorage(setCode: string): Promise<Card[]> {
+    return this.storage.get(setCode);
+  }
+
+  public getCardFromStorage(setCode: string, cardId: string): Promise<Card> {
+    return new Promise((resolve, reject) => {
+      this.getCardsFromStorage(setCode).then((cards: Card[]) => {
+        let card = cards.find((card: Card) => {
+          return card.id === cardId;
+        });
+        resolve(card);
+      });
+    });
   }
 
   public loadSets(): Promise<Set[]> {
