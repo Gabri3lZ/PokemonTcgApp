@@ -12,6 +12,8 @@ import { HttpModule } from "@angular/http";
 import { ComponentsModule } from "../components/components.module";
 import { EventsProvider } from '../providers/events/events';
 import {IonicStorageModule} from "@ionic/storage";
+import { File } from "@ionic-native/file";
+import { FileTransfer } from "@ionic-native/file-transfer";
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import {IonicStorageModule} from "@ionic/storage";
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CardsProvider,
-    EventsProvider
+    EventsProvider,
+    File,
+    FileTransfer
   ]
 })
 export class AppModule {}

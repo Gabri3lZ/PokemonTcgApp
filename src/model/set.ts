@@ -13,7 +13,6 @@ export class Set {
   imageUrl: string;
   imageUrlOld: string;
   imageUrlHiRes: string;
-  imageUrlMock: string;
 
   constructor(set: Set) {
     if (set) {
@@ -26,7 +25,6 @@ export class Set {
       this.imageUrl = this.getImageUrl();
       this.imageUrlOld = this.getImageUrlOld();
       this.imageUrlHiRes = this.getImageUrlHiRes();
-      this.imageUrlMock = this.getImageUrlMock();
     }
   }
 
@@ -61,10 +59,6 @@ export class Set {
     url += seriesCode + setNumber + '/';
     url += seriesCode + setNumber + '_logo_169_en.png';
     return url;
-  }
-
-  private getImageUrlMock(): string {
-    return 'http://localhost:8100/assets/img/mock/sm02-slider-logo-en.png';
   }
 
   private getSetNumber() {

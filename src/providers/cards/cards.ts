@@ -4,6 +4,8 @@ import 'rxjs/add/operator/map';
 import {Set} from "../../model/set";
 import {Card} from "../../model/card";
 import {Storage} from "@ionic/storage";
+import {File} from "@ionic-native/file";
+import {FileTransfer, FileTransferObject} from "@ionic-native/file-transfer";
 
 @Injectable()
 export class CardsProvider {
@@ -15,7 +17,9 @@ export class CardsProvider {
   private setsUrl = this.baseUrl + '/sets';
   private cardsUrl = this.baseUrl + '/cards';
 
-  constructor(public http: Http, private storage: Storage) {
+  private fileTransfer: FileTransferObject = this.transfer.create();
+
+  constructor(public http: Http, private storage: Storage, private file: File, private transfer: FileTransfer) {
   }
 
   public init(): Promise<null> {
@@ -23,13 +27,15 @@ export class CardsProvider {
       this.initSets().then((sets: Set[]) => {
         let counter = 0;
         for (let set of sets) {
-          this.initCards(set.code).then(() => {
-            counter++;
-            if (counter === sets.length) {
-              this.cardsInitialized.emit();
-              resolve();
-            }
-          })
+          this.downloadFileWithFallback([set.imageUrl, set.imageUrlOld, set.imageUrlHiRes], 'sets/' + set.code + '.png').then(() => {
+            this.initCards(set.code).then(() => {
+              counter++;
+              if (counter === sets.length) {
+                this.cardsInitialized.emit();
+                resolve();
+              }
+            })
+          });
         }
       });
     });
@@ -147,6 +153,35 @@ export class CardsProvider {
       this.http.get(this.cardsUrl + '/' + cardId).map(res => new Card(res.json().card)).subscribe((card: Card) => {
         resolve(card);
       });
+    });
+  }
+
+  public downloadFile(url: string, path: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.fileTransfer.download(url, this.file.dataDirectory + path).then(() => {
+        resolve(true);
+      }, (error) => {
+        resolve(false);
+      });
+    });
+  }
+
+  public downloadFileWithFallback(urls: string[], path: string): Promise<boolean> {
+    console.log(urls);
+    console.log(path);
+    return new Promise((resolve, reject) => {
+        this.fileTransfer.download(urls[0], this.file.dataDirectory + path).then(() => {
+          resolve(true);
+        }, (error) => {
+          if (urls.length > 1) {
+            urls.shift();
+            this.downloadFileWithFallback(urls, path).then((success: boolean) => {
+              resolve(success);
+            });
+          } else {
+            resolve(false);
+          }
+        });
     });
   }
 
