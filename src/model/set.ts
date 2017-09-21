@@ -9,6 +9,7 @@ export class Set {
   expandedLegal: boolean;
   releaseDate: string;
   symbolUrl: string;
+  image: string;
 
   imageUrl: string;
   imageUrlOld: string;

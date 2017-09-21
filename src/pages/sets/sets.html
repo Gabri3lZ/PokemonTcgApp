@@ -11,7 +11,7 @@
   <ion-item-group *ngFor="let serie of series">
     <ion-item-divider color="light">{{serie}}</ion-item-divider>
     <ion-card class="set" *ngFor="let set of getSets(serie)" (click)="itemTapped($event, set)">
-      <img class="image" [src]="file.dataDirectory + set.code"/>
+      <img class="image" *ngIf="set.image" [src]="set.image"/>
       <ion-card-content>
         <ion-card-title>
           {{set.name}}
