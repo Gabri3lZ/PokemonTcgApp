@@ -6,6 +6,7 @@ import {Card} from "../../model/card";
 import {Storage} from "@ionic/storage";
 import {File, FileEntry} from "@ionic-native/file";
 import {FileTransfer, FileTransferObject} from "@ionic-native/file-transfer";
+import {Platform} from "ionic-angular";
 
 @Injectable()
 export class CardsProvider {
@@ -18,8 +19,15 @@ export class CardsProvider {
   private cardsUrl = this.baseUrl + '/cards';
 
   private fileTransfer: FileTransferObject = this.transfer.create();
+  private storageDirectory: string = '';
 
-  constructor(public http: Http, private storage: Storage, private file: File, private transfer: FileTransfer) {
+  constructor(public http: Http, public platform: Platform, private storage: Storage,
+              private file: File, private transfer: FileTransfer) {
+    if (this.platform.is('ios')) {
+      this.storageDirectory = this.file.documentsDirectory;
+    } else {
+      this.storageDirectory = this.file.dataDirectory;
+    }
   }
 
   public init(): Promise<null> {
@@ -167,7 +175,7 @@ export class CardsProvider {
 
   public downloadFile(url: string, path: string): Promise<FileEntry> {
     return new Promise((resolve, reject) => {
-      this.fileTransfer.download(url, this.file.dataDirectory + path).then((entry) => {
+      this.fileTransfer.download(url, this.storageDirectory + path).then((entry) => {
         resolve(entry);
       }, (error) => {
         resolve(null);
@@ -177,10 +185,9 @@ export class CardsProvider {
 
   public downloadFileWithFallback(urls: string[], path: string): Promise<FileEntry> {
     return new Promise((resolve, reject) => {
-        this.fileTransfer.download(urls[0], this.file.dataDirectory + path).then((entry) => {
+        this.fileTransfer.download(urls[0], this.storageDirectory + path).then((entry) => {
           resolve(entry);
         }, (error) => {
-          console.log(error.source);
           if (urls.length > 1) {
             urls.shift();
             this.downloadFileWithFallback(urls, path).then((entry: FileEntry) => {
