@@ -9,11 +9,10 @@ export class Set {
   expandedLegal: boolean;
   releaseDate: string;
   symbolUrl: string;
-  image: string;
+  imageUrls: string[];
 
-  imageUrl: string;
-  imageUrlOld: string;
-  imageUrlHiRes: string;
+  symbolEntry: string;
+  imageEntry: string;
 
   constructor(set: Set) {
     if (set) {
@@ -22,44 +21,36 @@ export class Set {
           this[key] = set[key];
         }
       }
-
-      this.imageUrl = this.getImageUrl();
-      this.imageUrlOld = this.getImageUrlOld();
-      this.imageUrlHiRes = this.getImageUrlHiRes();
+      this.imageUrls = this.getImageUrls();
     }
   }
 
-  private getImageUrl(): string {
+  private getImageUrls(): string[] {
     let setNumber = this.getSetNumber();
     let seriesCode = this.getSeriesCode();
 
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
+    let urls: string[] = [];
+    let url: string = '';
+
+    url = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
     url += seriesCode + '_series/';
     url += seriesCode + setNumber + '/';
     url += seriesCode + setNumber + '-slider-logo-en.png';
-    return url;
-  }
+    urls.push(url);
 
-  private getImageUrlOld(): string {
-    let setNumber = this.getSetNumber();
-    let seriesCode = this.getSeriesCode();
-
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
+    url = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
     url += seriesCode + '_series/';
     url += seriesCode + setNumber + '/';
     url += seriesCode + setNumber + '_slider_logo_en.png';
-    return url;
-  }
+    urls.push(url);
 
-  private getImageUrlHiRes() {
-    let setNumber = this.getSetNumber();
-    let seriesCode = this.getSeriesCode();
-
-    let url: string = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
+    url = 'https://assets.pokemon.com/assets/cms2/img/trading-card-game/series/';
     url += seriesCode + '_series/';
     url += seriesCode + setNumber + '/';
     url += seriesCode + setNumber + '_logo_169_en.png';
-    return url;
+    urls.push(url);
+
+    return urls;
   }
 
   private getSetNumber() {

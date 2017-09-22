@@ -80,15 +80,20 @@ export class CardsProvider {
       this.loadSets().then((sets: Set[]) => {
         let counter = 0;
         for (let set of sets) {
-          this.downloadFileWithFallback([set.imageUrl, set.imageUrlOld, set.imageUrlHiRes], 'sets/' + set.code + '.png').then((entry: FileEntry) => {
-            counter++;
-            if (entry) {
-              set.image = entry.toURL();
+          this.downloadFileWithFallback(set.imageUrls, 'sets/' + set.code + '-image.png').then((imageEntry: FileEntry) => {
+            if (imageEntry) {
+              set.imageEntry = imageEntry.toURL();
             }
-            if (counter === sets.length) {
-              this.storage.set('sets', sets);
-              resolve(sets);
-            }
+            this.downloadFile(set.symbolUrl, 'sets/' + set.code + '-symbol.png').then((symbolEntry: FileEntry) => {
+              counter++;
+              if (symbolEntry) {
+                set.symbolEntry = symbolEntry.toURL();
+              }
+              if (counter === sets.length) {
+                this.storage.set('sets', sets);
+                resolve(sets);
+              }
+            });
           });
         }
       });
