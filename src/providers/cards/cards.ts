@@ -190,18 +190,17 @@ export class CardsProvider {
 
   public downloadFileWithFallback(urls: string[], path: string): Promise<FileEntry> {
     return new Promise((resolve, reject) => {
-        this.fileTransfer.download(urls[0], this.storageDirectory + path).then((entry) => {
-          resolve(entry);
-        }, (error) => {
-          if (urls.length > 1) {
-            urls.shift();
-            this.downloadFileWithFallback(urls, path).then((entry: FileEntry) => {
-              resolve(entry);
-            });
-          } else {
-            resolve(null);
-          }
-        });
+      this.fileTransfer.download(urls.shift(), this.storageDirectory + path).then((entry) => {
+        resolve(entry);
+      }, (error) => {
+        if (urls.length > 0) {
+          this.downloadFileWithFallback(urls, path).then((entry: FileEntry) => {
+            resolve(entry);
+          });
+        } else {
+          resolve(null);
+        }
+      });
     });
   }
 
