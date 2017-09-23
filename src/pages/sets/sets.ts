@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from "@angular/platform-browser";
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Set } from "../../model/set";
 import { CardsProvider } from "../../providers/cards/cards";
-import {File} from "@ionic-native/file";
+import { File } from "@ionic-native/file";
 
 @IonicPage({
   name: 'sets-page',
@@ -17,7 +18,7 @@ export class SetsPage {
   series: string[] = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public file: File,
-              private cardsProvider: CardsProvider) {
+              public domSanitizer: DomSanitizer, private cardsProvider: CardsProvider) {
     this.cardsProvider.getSetsFromStorage().then((sets: Set[]) => {
       this.sets = sets;
       for (let set of sets) {
