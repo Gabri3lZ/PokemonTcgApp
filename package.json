@@ -59,10 +59,10 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-wkwebview-engine": {},
             "cordova-sqlite-storage": {},
             "cordova-plugin-file": {},
-            "cordova-plugin-file-transfer": {}
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-wkwebview-engine": {}
         },
         "platforms": [
             "android",
