@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {Content, IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {Subscription} from "rxjs/Subscription";
+import {Card} from "../../model/card";
 
 @IonicPage({
   name: 'image-page'
@@ -13,12 +14,12 @@ export class ImagePage implements AfterViewInit, OnDestroy {
 
   @ViewChild(Content)
   content: Content;
-  imageUrl: string;
+  card: Card;
 
   private scrollSubscription: Subscription;
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
-    this.imageUrl = navParams.get('imageUrl');
+    this.card = navParams.get('card');
   }
 
   ngAfterViewInit() {

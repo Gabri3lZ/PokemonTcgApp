@@ -33,7 +33,10 @@ export class CardPage {
     if (!this.card) {
       this.cardsProvider.getCardFromStorage(this.setCode, this.cardId).then((card: Card) => {
         this.card = card;
+        this.storeCardImageHiRes();
       });
+    } else {
+      this.storeCardImageHiRes();
     }
 
     if (!this.set) {
@@ -65,7 +68,7 @@ export class CardPage {
 
     setTimeout(() => {
       let modal = this.modalCtrl.create('image-page', {
-        imageUrl: this.card.imageUrlHiRes
+        card: this.card
       }, {cssClass: 'image-modal'});
       this.eventsProvider.toggleBackdropVisible.emit(true);
       modal.onWillDismiss(() => {
@@ -75,6 +78,12 @@ export class CardPage {
         this.eventsProvider.toggleBackdropActive.emit(false);
       });
       modal.present();
+    });
+  }
+
+  private storeCardImageHiRes() {
+    this.cardsProvider.storeCardImageHiRes(this.setCode, this.cards, this.cardId).then((card: Card) => {
+      this.card = card;
     });
   }
 

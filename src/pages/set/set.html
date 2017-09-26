@@ -70,7 +70,7 @@
     <ion-list *ngSwitchCase="'thumbnail'">
       <button ion-item class="card" *ngFor="let card of cards" (click)="itemTapped($event, card)">
         <ion-thumbnail item-start>
-          <img class="image" [src]="card.imageUrl">
+          <img class="image" [src]="card.imageEntry || card.imageUrl">
         </ion-thumbnail>
         <ion-grid>
           <ion-row>
@@ -91,7 +91,7 @@
       <ion-row *ngFor="let i of getIndexArray(3)">
         <ion-col *ngFor="let j of [0, 1, 2]">
           <img *ngIf="cards[3 * i + j]" class="image"
-               [src]="cards[3 * i + j].imageUrl"
+               [src]="cards[3 * i + j].imageEntry || cards[3 * i + j].imageUrl"
                (click)="itemTapped($event, cards[3 * i + j])">
         </ion-col>
       </ion-row>

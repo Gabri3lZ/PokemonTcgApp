@@ -29,17 +29,19 @@ export class CardsProvider {
     this.fileTransfer = this.transfer.create();
     this.storageDirectory = this.file.dataDirectory;
     return new Promise((resolve, reject) => {
-      this.initSets().then((sets: Set[]) => {
-        let counter = 0;
-        for (let set of sets) {
-          this.initCards(set.code).then(() => {
-            counter++;
-            if (counter === sets.length) {
-              this.cardsInitialized.emit();
-              resolve();
-            }
-          })
-        }
+      this.storage.ready().then(() => {
+        this.initSets().then((sets: Set[]) => {
+          let counter = 0;
+          for (let set of sets) {
+            this.initCards(set.code).then(() => {
+              counter++;
+              if (counter === sets.length) {
+                this.cardsInitialized.emit();
+                resolve();
+              }
+            })
+          }
+        });
       });
     });
   }
@@ -93,8 +95,9 @@ export class CardsProvider {
                 }
               }
               if (counter === sets.length) {
-                this.storage.set('sets', sets);
-                resolve(sets);
+                this.storage.set('sets', sets).then(() => {
+                  resolve(sets);
+                });
               }
             });
           });
@@ -103,14 +106,72 @@ export class CardsProvider {
     });
   }
 
-  public storeCards(setCode: string): Promise<Card[]> {
+  public storeCards(setCode: string, cards?: Card[]): Promise<Card[]> {
     return new Promise((resolve, reject) => {
-      this.loadCards(setCode).then((cards: Card[]) => {
-        this.storage.set(setCode, cards);
-        resolve(cards);
-      }, (error) => {
-        reject(error);
+      if (cards) {
+        this.storage.set(setCode, cards).then(() => {
+          resolve(cards);
+        });
+      } else {
+        this.loadCards(setCode).then((cards: Card[]) => {
+          this.storage.set(setCode, cards).then(() => {
+            resolve(cards);
+          });
+        }, (error) => {
+          reject(error);
+        });
+      }
+    });
+  }
+
+  public storeSetImages(setCode: string, cards: Card[]): Promise<Card[]> {
+    return new Promise((resolve, reject) => {
+      let counter = 0;
+      for (let card of cards) {
+        if (!card.imageEntry) {
+          this.downloadFile(card.imageUrl, 'cards/' + setCode + '/' + card.number + '.png').then((imageEntry: FileEntry) => {
+            counter++;
+            card.imageEntry = imageEntry.toURL();
+            if (this.platform.is('ios')) {
+              card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
+            }
+            if (counter === cards.length) {
+              this.storeCards(setCode, cards).then(() => {
+                resolve(cards);
+              });
+            }
+          });
+        } else {
+          counter++;
+        }
+      }
+    });
+  }
+
+  public storeCardImageHiRes(setCode: string, cards: Card[], cardId: string): Promise<Card> {
+    return new Promise((resolve, reject) => {
+      let card = cards.find((card: Card) => {
+        return card.id === cardId;
       });
+      if (card && !card.imageEntryHiRes) {
+        this.downloadFile(card.imageUrlHiRes, 'cards/' + setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
+          card.imageEntryHiRes = imageEntryHiRes.toURL();
+          if (this.platform.is('ios')) {
+            card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
+          }
+          this.storeCards(setCode, cards).then(() => {
+            resolve(card);
+          }, (error) => {
+            reject(error);
+          });
+        });
+      } else {
+        if (card) {
+          resolve(card);
+        } else {
+          reject(new Error('card not found'));
+        }
+      }
     });
   }
 
@@ -124,7 +185,11 @@ export class CardsProvider {
         let set = sets.find((set: Set) => {
           return set.code === setCode;
         });
-        resolve(set);
+        if (set) {
+          resolve(set);
+        } else {
+          reject(new Error('set not found'));
+        }
       }, (error) => {
         reject(error);
       });
@@ -141,7 +206,11 @@ export class CardsProvider {
         let card = cards.find((card: Card) => {
           return card.id === cardId;
         });
-        resolve(card);
+        if (card) {
+          resolve(card);
+        } else {
+          reject(new Error('card not found'));
+        }
       }, (error) => {
         reject(error);
       });

@@ -37,6 +37,9 @@ export class SetPage {
 
     this.cardsProvider.getCardsFromStorage(this.setCode).then((cards: Card[]) => {
       this.cards = cards;
+      this.cardsProvider.storeSetImages(this.setCode, this.cards).then((cards: Card[]) => {
+        this.cards = cards;
+      });
     });
 
     if (!this.set) {

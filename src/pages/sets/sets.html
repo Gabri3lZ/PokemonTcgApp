@@ -15,7 +15,7 @@
       <ion-card-content>
         <ion-card-title>
           {{set.name}}
-          <img class="set-symbol" [src]="set.symbolEntry"/>
+          <img class="set-symbol" [src]="set.symbolEntry || set.symbolUrl"/>
         </ion-card-title>
         <p>
           {{set.series}}

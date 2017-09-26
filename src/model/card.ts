@@ -29,6 +29,9 @@ export class Card {
   resistances: Resistance[];
   weaknesses: Weakness[];
 
+  imageEntry: string;
+  imageEntryHiRes: string;
+
   constructor(card: Card) {
     if (card) {
       for (let key in card) {
