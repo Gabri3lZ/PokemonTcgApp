@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage, ModalController, Navbar, NavController, NavParams, ViewController} from 'ionic-angular';
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 import {CardsProvider} from "../../providers/cards/cards";
 import {EventsProvider} from "../../providers/events/events";
+import {DIRECTION_LEFT, DIRECTION_RIGHT} from "ionic-angular/gestures/hammer";
 
 @IonicPage({
   name: 'card-page',
@@ -16,14 +17,22 @@ import {EventsProvider} from "../../providers/events/events";
 })
 export class CardPage {
 
+  @ViewChild(Navbar) navBar: Navbar;
+
   cardId: string;
   setCode: string;
   card: Card;
   cards: Card[];
   set: Set;
 
-  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams,
-              private cardsProvider: CardsProvider, private eventsProvider: EventsProvider) {
+  private setViewCtrl: ViewController;
+
+  constructor(public modalCtrl: ModalController,
+              public navCtrl: NavController,
+              public viewCtrl: ViewController,
+              public navParams: NavParams,
+              private cardsProvider: CardsProvider,
+              private eventsProvider: EventsProvider) {
     this.cardId = navParams.get('cardId');
     this.setCode = navParams.get('setCode');
     this.card = navParams.get('card');
@@ -46,8 +55,17 @@ export class CardPage {
     }
   }
 
+  ionViewDidLoad() {
+    this.setViewCtrl = this.navCtrl.getViews().find((viewCtrl) => {
+      return viewCtrl.id === 'set-page';
+    });
+    this.navBar.backButtonClick = (event: UIEvent) => {
+      this.navCtrl.popTo(this.setViewCtrl);
+    }
+  }
+
   goBackToSet(event) {
-    this.navCtrl.popTo('set-page');
+    this.navCtrl.popTo(this.setViewCtrl);
   }
 
   itemTapped(event, cardName: string) {
@@ -79,6 +97,37 @@ export class CardPage {
       });
       modal.present();
     });
+  }
+
+  cardSwiped(event) {
+    let cardNumber;
+    let direction;
+    if (event.direction === DIRECTION_RIGHT) {
+      cardNumber = parseInt(this.card.number) - 1;
+      direction = 'back';
+    } else if (event.direction === DIRECTION_LEFT) {
+      cardNumber = parseInt(this.card.number) + 1;
+      direction = 'forward';
+    }
+    if (cardNumber > 0 && cardNumber <= this.cards.length) {
+      cardNumber = cardNumber.toString();
+      let card = this.cards.find((card: Card) => {
+        return card.number === cardNumber;
+      });
+
+      this.navCtrl.push('card-page', {
+        card: card,
+        cards: this.cards,
+        set: this.set
+      }, {
+        direction: direction
+      }).then(() => {
+        let index = this.viewCtrl.index;
+        this.navCtrl.remove(index, 1, {
+          animate: false
+        });
+      });
+    }
   }
 
   private storeCardImageHiRes() {
