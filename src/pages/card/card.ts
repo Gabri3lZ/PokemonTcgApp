@@ -117,35 +117,37 @@ export class CardPage {
   }
 
   cardSwiped(event) {
-    let cardNumber;
-    let direction;
-    if (event.direction === DIRECTION_RIGHT) {
-      cardNumber = parseInt(this.card.number) - 1;
-      direction = 'back';
-    } else if (event.direction === DIRECTION_LEFT) {
-      cardNumber = parseInt(this.card.number) + 1;
-      direction = 'forward';
-    }
-    if (cardNumber > 0 && cardNumber <= this.cards.length) {
-      cardNumber = cardNumber.toString();
-      let card = this.cards.find((card: Card) => {
-        return card.number === cardNumber;
-      });
-
-      this.navCtrl.push('card-page', {
-        cardId: card.id,
-        setCode: this.setCode,
-        card: card,
-        cards: this.cards,
-        set: this.set
-      }, {
-        direction: direction
-      }).then(() => {
-        let index = this.viewCtrl.index;
-        this.navCtrl.remove(index, 1, {
-          animate: false
+    if (!this.navCtrl.isTransitioning()) {
+      let cardNumber;
+      let direction;
+      if (event.direction === DIRECTION_RIGHT) {
+        cardNumber = parseInt(this.card.number) - 1;
+        direction = 'back';
+      } else if (event.direction === DIRECTION_LEFT) {
+        cardNumber = parseInt(this.card.number) + 1;
+        direction = 'forward';
+      }
+      if (cardNumber > 0 && cardNumber <= this.cards.length) {
+        cardNumber = cardNumber.toString();
+        let card = this.cards.find((card: Card) => {
+          return card.number === cardNumber;
         });
-      });
+
+        this.navCtrl.push('card-page', {
+          cardId: card.id,
+          setCode: this.setCode,
+          card: card,
+          cards: this.cards,
+          set: this.set
+        }, {
+          direction: direction
+        }).then(() => {
+          let index = this.viewCtrl.index;
+          this.navCtrl.remove(index, 1, {
+            animate: false
+          });
+        });
+      }
     }
   }
 
