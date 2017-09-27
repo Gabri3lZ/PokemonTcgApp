@@ -10,9 +10,9 @@
 <ion-content>
   <div *ngIf="card" (swipe)="cardSwiped($event)">
     <ion-card>
-      <div class="image-background" [style.background-image]="'url(' + (card.imageEntry || card.imageUrl) + ')'"></div>
+      <div class="image-background" [style.background-image]="'url(' + (card.imageEntry) + ')'"></div>
       <div class="image-container">
-        <img class="image" [src]="card.imageEntry || card.imageUrl" (click)="imageTapped($event)"/>
+        <img class="image" [src]="card.imageEntry" (click)="imageTapped($event)"/>
       </div>
     </ion-card>
     <ion-card>

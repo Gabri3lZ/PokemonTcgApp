@@ -27,7 +27,11 @@ export class CardsProvider {
 
   public init(): Promise<null> {
     this.fileTransfer = this.transfer.create();
-    this.storageDirectory = this.file.dataDirectory;
+    if (this.platform.is('ios')) {
+      this.storageDirectory = this.file.documentsDirectory;
+    } else {
+      this.storageDirectory = this.file.dataDirectory;
+    }
     return new Promise((resolve, reject) => {
       this.storage.ready().then(() => {
         this.initSets().then((sets: Set[]) => {
@@ -131,9 +135,11 @@ export class CardsProvider {
         if (!card.imageEntry) {
           this.downloadFile(card.imageUrl, 'cards/' + setCode + '/' + card.number + '.png').then((imageEntry: FileEntry) => {
             counter++;
-            card.imageEntry = imageEntry.toURL();
-            if (this.platform.is('ios')) {
-              card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
+            if (imageEntry) {
+              card.imageEntry = imageEntry.toURL();
+              if (this.platform.is('ios')) {
+                card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
+              }
             }
             if (counter === cards.length) {
               this.storeCards(setCode, cards).then(() => {
@@ -148,31 +154,35 @@ export class CardsProvider {
     });
   }
 
-  public storeCardImageHiRes(setCode: string, cards: Card[], cardId: string): Promise<Card> {
+  public storeCardImageHiRes(setCode: string, cardId: string): Promise<Card> {
     return new Promise((resolve, reject) => {
-      let card = cards.find((card: Card) => {
-        return card.id === cardId;
-      });
-      if (card && !card.imageEntryHiRes) {
-        this.downloadFile(card.imageUrlHiRes, 'cards/' + setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
-          card.imageEntryHiRes = imageEntryHiRes.toURL();
-          if (this.platform.is('ios')) {
-            card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
-          }
-          this.storeCards(setCode, cards).then(() => {
-            resolve(card);
-          }, (error) => {
-            reject(error);
-          });
+      this.getCardsFromStorage(setCode).then((cards: Card[]) => {
+        let card = cards.find((card: Card) => {
+          return card.id === cardId;
         });
-      } else {
-        if (card) {
-          resolve(card);
+        if (card && !card.imageEntryHiRes) {
+          this.downloadFile(card.imageUrlHiRes, 'cards/' + setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
+            if (imageEntryHiRes) {
+              card.imageEntryHiRes = imageEntryHiRes.toURL();
+              if (this.platform.is('ios')) {
+                card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
+              }
+            }
+            this.storeCards(setCode, cards).then(() => {
+              resolve(card);
+            }, (error) => {
+              reject(error);
+            });
+          });
         } else {
-          reject(new Error('card not found'));
+          if (card) {
+            resolve(card);
+          } else {
+            reject(new Error('card not found'));
+          }
         }
-      }
-    });
+      });
+      });
   }
 
   public getSetsFromStorage(): Promise<Set[]> {
@@ -274,27 +284,35 @@ export class CardsProvider {
 
   public downloadFile(url: string, path: string): Promise<FileEntry> {
     return new Promise((resolve, reject) => {
-      this.fileTransfer.download(url, this.storageDirectory + path).then((entry) => {
-        resolve(entry);
-      }, (error) => {
+      if (this.storageDirectory) {
+        this.fileTransfer.download(url, this.storageDirectory + path).then((entry) => {
+          resolve(entry);
+        }, (error) => {
+          resolve(null);
+        });
+      } else {
         resolve(null);
-      });
+      }
     });
   }
 
   public downloadFileWithFallback(urls: string[], path: string): Promise<FileEntry> {
     return new Promise((resolve, reject) => {
-      this.fileTransfer.download(urls.shift(), this.storageDirectory + path).then((entry) => {
-        resolve(entry);
-      }, (error) => {
-        if (urls.length > 0) {
-          this.downloadFileWithFallback(urls, path).then((entry: FileEntry) => {
-            resolve(entry);
-          });
-        } else {
-          resolve(null);
-        }
-      });
+      if (this.storageDirectory) {
+        this.fileTransfer.download(urls.shift(), this.storageDirectory + path).then((entry) => {
+          resolve(entry);
+        }, (error) => {
+          if (urls.length > 0) {
+            this.downloadFileWithFallback(urls, path).then((entry: FileEntry) => {
+              resolve(entry);
+            });
+          } else {
+            resolve(null);
+          }
+        });
+      } else {
+        resolve(null);
+      }
     });
   }
 

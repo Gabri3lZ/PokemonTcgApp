@@ -1,5 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
-import {IonicPage, ModalController, Navbar, NavController, NavParams, ViewController} from 'ionic-angular';
+import {
+  IonicPage, LoadingController, ModalController, Navbar, NavController, NavParams,
+  ViewController
+} from 'ionic-angular';
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 import {CardsProvider} from "../../providers/cards/cards";
@@ -24,28 +27,27 @@ export class CardPage {
   card: Card;
   cards: Card[];
   set: Set;
+  cardImageHiResLoaded: boolean = false;
 
   private setViewCtrl: ViewController;
 
-  constructor(public modalCtrl: ModalController,
-              public navCtrl: NavController,
-              public viewCtrl: ViewController,
-              public navParams: NavParams,
+  constructor(private modalCtrl: ModalController,
+              private navCtrl: NavController,
+              private viewCtrl: ViewController,
+              private navParams: NavParams,
               private cardsProvider: CardsProvider,
-              private eventsProvider: EventsProvider) {
-    this.cardId = navParams.get('cardId');
-    this.setCode = navParams.get('setCode');
-    this.card = navParams.get('card');
-    this.cards = navParams.get('cards');
-    this.set = navParams.get('set');
+              private eventsProvider: EventsProvider,
+              private loadingCtrl: LoadingController) {
+    this.cardId = this.navParams.get('cardId');
+    this.setCode = this.navParams.get('setCode');
+    this.card = this.navParams.get('card');
+    this.cards = this.navParams.get('cards');
+    this.set = this.navParams.get('set');
 
     if (!this.card) {
       this.cardsProvider.getCardFromStorage(this.setCode, this.cardId).then((card: Card) => {
         this.card = card;
-        this.storeCardImageHiRes();
       });
-    } else {
-      this.storeCardImageHiRes();
     }
 
     if (!this.set) {
@@ -84,18 +86,33 @@ export class CardPage {
   imageTapped(event) {
     this.eventsProvider.toggleBackdropActive.emit(true);
 
+    let loading = this.loadingCtrl.create({
+      showBackdrop: false
+    });
     setTimeout(() => {
-      let modal = this.modalCtrl.create('image-page', {
-        card: this.card
-      }, {cssClass: 'image-modal'});
-      this.eventsProvider.toggleBackdropVisible.emit(true);
-      modal.onWillDismiss(() => {
-        this.eventsProvider.toggleBackdropVisible.emit(false);
+      if (!this.cardImageHiResLoaded) {
+        loading.present();
+      }
+    });
+
+    this.cardsProvider.storeCardImageHiRes(this.setCode, this.cardId).then((card: Card) => {
+      this.cardImageHiResLoaded = true;
+      this.card = card;
+      loading.dismiss();
+
+      setTimeout(() => {
+        let modal = this.modalCtrl.create('image-page', {
+          card: this.card
+        }, {cssClass: 'image-modal'});
+        this.eventsProvider.toggleBackdropVisible.emit(true);
+        modal.onWillDismiss(() => {
+          this.eventsProvider.toggleBackdropVisible.emit(false);
+        });
+        modal.onDidDismiss(() => {
+          this.eventsProvider.toggleBackdropActive.emit(false);
+        });
+        modal.present();
       });
-      modal.onDidDismiss(() => {
-        this.eventsProvider.toggleBackdropActive.emit(false);
-      });
-      modal.present();
     });
   }
 
@@ -116,6 +133,8 @@ export class CardPage {
       });
 
       this.navCtrl.push('card-page', {
+        cardId: card.id,
+        setCode: this.setCode,
         card: card,
         cards: this.cards,
         set: this.set
@@ -128,12 +147,6 @@ export class CardPage {
         });
       });
     }
-  }
-
-  private storeCardImageHiRes() {
-    this.cardsProvider.storeCardImageHiRes(this.setCode, this.cards, this.cardId).then((card: Card) => {
-      this.card = card;
-    });
   }
 
 }

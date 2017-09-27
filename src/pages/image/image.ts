@@ -41,8 +41,4 @@ export class ImagePage implements AfterViewInit, OnDestroy {
     this.viewCtrl.dismiss();
   }
 
-  test(event) {
-    console.log('event: ', event);
-  }
-
 }
