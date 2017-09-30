@@ -12,6 +12,7 @@ import {Platform} from "ionic-angular";
 export class CardsProvider {
 
   public cardsInitialized: EventEmitter<null> = new EventEmitter<null>();
+  public viewOption = 'list';
 
   private baseUrl = 'https://api.pokemontcg.io/v1';
   // private baseUrl = 'http://localhost:3000';

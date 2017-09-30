@@ -17,7 +17,14 @@ export class SetPage {
   setCode: string;
   set: Set;
   cards: Card[] = [];
-  view: string = 'list';
+
+  get view(): string {
+    return this.cardsProvider.viewOption;
+  }
+
+  set view(viewOption: string) {
+    this.cardsProvider.viewOption = viewOption;
+  }
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private cardsProvider: CardsProvider) {
     this.setCode = navParams.get('setCode');
