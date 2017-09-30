@@ -1,8 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {
-  IonicPage, LoadingController, ModalController, Navbar, NavController, NavParams,
-  ViewController
-} from 'ionic-angular';
+import {IonicPage, ModalController, Navbar, NavController, NavParams, ViewController} from 'ionic-angular';
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 import {CardsProvider} from "../../providers/cards/cards";
@@ -27,7 +24,6 @@ export class CardPage {
   card: Card;
   cards: Card[];
   set: Set;
-  cardImageHiResLoaded: boolean = false;
 
   private setViewCtrl: ViewController;
 
@@ -36,8 +32,7 @@ export class CardPage {
               private viewCtrl: ViewController,
               private navParams: NavParams,
               private cardsProvider: CardsProvider,
-              private eventsProvider: EventsProvider,
-              private loadingCtrl: LoadingController) {
+              private eventsProvider: EventsProvider) {
     this.cardId = this.navParams.get('cardId');
     this.setCode = this.navParams.get('setCode');
     this.card = this.navParams.get('card');
@@ -86,33 +81,22 @@ export class CardPage {
   imageTapped(event) {
     this.eventsProvider.toggleBackdropActive.emit(true);
 
-    let loading = this.loadingCtrl.create({
-      showBackdrop: false
-    });
     setTimeout(() => {
-      if (!this.cardImageHiResLoaded) {
-        loading.present();
-      }
+      let modal = this.modalCtrl.create('image-page', {
+        card: this.card
+      }, {cssClass: 'image-modal'});
+      this.eventsProvider.toggleBackdropVisible.emit(true);
+      modal.onWillDismiss(() => {
+        this.eventsProvider.toggleBackdropVisible.emit(false);
+      });
+      modal.onDidDismiss(() => {
+        this.eventsProvider.toggleBackdropActive.emit(false);
+      });
+      modal.present();
     });
 
     this.cardsProvider.storeCardImageHiRes(this.setCode, this.cardId).then((card: Card) => {
-      this.cardImageHiResLoaded = true;
-      this.card = card;
-      loading.dismiss();
-
-      setTimeout(() => {
-        let modal = this.modalCtrl.create('image-page', {
-          card: this.card
-        }, {cssClass: 'image-modal'});
-        this.eventsProvider.toggleBackdropVisible.emit(true);
-        modal.onWillDismiss(() => {
-          this.eventsProvider.toggleBackdropVisible.emit(false);
-        });
-        modal.onDidDismiss(() => {
-          this.eventsProvider.toggleBackdropActive.emit(false);
-        });
-        modal.present();
-      });
+      this.card.imageEntryHiRes = card.imageEntryHiRes;
     });
   }
 

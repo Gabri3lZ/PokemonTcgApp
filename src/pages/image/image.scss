@@ -11,6 +11,8 @@ page-image {
         border-radius: 10px;
         box-shadow: $modal-inset-box-shadow;
         margin: auto;
+        width: 100%;
+        height: auto;
       }
     }
   }

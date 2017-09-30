@@ -1,5 +1,5 @@
 <ion-content (click)="close($event)">
   <div class="container">
-    <img [src]="card.imageEntryHiRes"/>
+    <img [src]="card.imageEntryHiRes || card.imageEntry"/>
   </div>
 </ion-content>
