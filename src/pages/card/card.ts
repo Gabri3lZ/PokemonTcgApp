@@ -40,7 +40,7 @@ export class CardPage {
     this.set = this.navParams.get('set');
 
     if (!this.card) {
-      this.cardsProvider.getCardFromStorage(this.setCode, this.cardId).then((card: Card) => {
+      this.cardsProvider.getCardFromStorage(this.cardId).then((card: Card) => {
         this.card = card;
       });
     }

@@ -1,5 +1,7 @@
 export class Set {
 
+  _id: string;
+  _rev: string;
   code: string;
   ptcgoCode: string;
   name: string;
@@ -7,7 +9,7 @@ export class Set {
   totalCards: number;
   standardLegal: boolean;
   expandedLegal: boolean;
-  releaseDate: string;
+  releaseDate: Date;
   symbolUrl: string;
   imageUrls: string[];
 
@@ -18,9 +20,14 @@ export class Set {
     if (set) {
       for (let key in set) {
         if (set.hasOwnProperty(key)) {
-          this[key] = set[key];
+          if (key === 'releaseDate') {
+            this[key] = new Date(set[key]);
+          } else {
+            this[key] = set[key];
+          }
         }
       }
+      this._id = this.code;
       this.imageUrls = this.getImageUrls();
     }
   }

@@ -5,6 +5,8 @@ import {AncientTrait} from "./ancienttrait";
 import {Ability} from "./ability";
 
 export class Card {
+  _id: string;
+  _rev: string;
   id: string;
   name: string;
   nationalPokedexNumber: number;
@@ -39,6 +41,7 @@ export class Card {
           this[key] = card[key];
         }
       }
+      this._id = this.id;
     }
   }
 }
