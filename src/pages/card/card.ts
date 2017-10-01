@@ -121,7 +121,8 @@ export class CardPage {
           cards: this.cards,
           set: this.set
         }, {
-          direction: direction
+          direction: direction,
+          animation: 'ios-transition'
         }).then(() => {
           let index = this.viewCtrl.index;
           this.navCtrl.remove(index, 1, {
