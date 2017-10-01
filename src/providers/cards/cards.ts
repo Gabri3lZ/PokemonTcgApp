@@ -163,6 +163,7 @@ export class CardsProvider {
         let counter = 0;
         for (let card of cards) {
           this.cardsDb.put(card).then((response: PutResponse) => {
+            counter++;
             card._rev = response.rev;
             if (counter === cards.length) {
               resolve(cards);
