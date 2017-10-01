@@ -30,7 +30,7 @@ export class CardsProvider {
     this.fileTransfer = this.transfer.create();
     if (this.platform.is('ios')) {
       this.storageDirectory = this.file.documentsDirectory;
-    } else {
+    } else if (this.platform.is('android')) {
       this.storageDirectory = this.file.dataDirectory;
     }
     return new Promise((resolve, reject) => {
@@ -90,6 +90,8 @@ export class CardsProvider {
               if (this.platform.is('ios')) {
                 set.imageEntry = set.imageEntry.substring(7, set.imageEntry.length);
               }
+            } else {
+              set.imageEntry = set.imageUrls[0];
             }
             this.downloadFile(set.symbolUrl, 'sets/' + set.code + '-symbol.png').then((symbolEntry: FileEntry) => {
               counter++;
@@ -98,6 +100,8 @@ export class CardsProvider {
                 if (this.platform.is('ios')) {
                   set.symbolEntry = set.symbolEntry.substring(7, set.symbolEntry.length);
                 }
+              } else {
+                set.symbolEntry = set.symbolUrl;
               }
               if (counter === sets.length) {
                 this.storage.set('sets', sets).then(() => {
@@ -141,6 +145,8 @@ export class CardsProvider {
               if (this.platform.is('ios')) {
                 card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
               }
+            } else {
+              card.imageEntry = card.imageUrl;
             }
             if (counter === cards.length) {
               this.storeCards(setCode, cards).then(() => {
@@ -168,6 +174,8 @@ export class CardsProvider {
               if (this.platform.is('ios')) {
                 card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
               }
+            } else {
+              card.imageEntryHiRes = card.imageUrlHiRes;
             }
             this.storeCards(setCode, cards).then(() => {
               resolve(card);
