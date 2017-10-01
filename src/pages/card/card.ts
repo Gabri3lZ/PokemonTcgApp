@@ -102,20 +102,17 @@ export class CardPage {
 
   cardSwiped(event) {
     if (!this.navCtrl.isTransitioning()) {
-      let cardNumber;
+      let cardIndex;
       let direction;
       if (event.direction === DIRECTION_RIGHT) {
-        cardNumber = parseInt(this.card.number) - 1;
+        cardIndex = this.cards.indexOf(this.card) - 1;
         direction = 'back';
       } else if (event.direction === DIRECTION_LEFT) {
-        cardNumber = parseInt(this.card.number) + 1;
+        cardIndex = this.cards.indexOf(this.card) + 1;
         direction = 'forward';
       }
-      if (cardNumber > 0 && cardNumber <= this.cards.length) {
-        cardNumber = cardNumber.toString();
-        let card = this.cards.find((card: Card) => {
-          return card.number === cardNumber;
-        });
+      if (cardIndex >= 0 && cardIndex < this.cards.length) {
+        let card = this.cards[cardIndex];
 
         this.navCtrl.push('card-page', {
           cardId: card.id,
