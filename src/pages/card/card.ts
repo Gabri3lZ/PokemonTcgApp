@@ -2,9 +2,9 @@ import {Component, ViewChild} from '@angular/core';
 import {IonicPage, ModalController, Navbar, NavController, NavParams, ViewController} from 'ionic-angular';
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
-import {CardsProvider} from "../../providers/cards/cards";
 import {EventsProvider} from "../../providers/events/events";
 import {DIRECTION_LEFT, DIRECTION_RIGHT} from "ionic-angular/gestures/hammer";
+import {CardsStorage} from "../../interfaces/cards/cardsStorage";
 
 @IonicPage({
   name: 'card-page',
@@ -31,7 +31,7 @@ export class CardPage {
               private navCtrl: NavController,
               private viewCtrl: ViewController,
               private navParams: NavParams,
-              private cardsProvider: CardsProvider,
+              private cardsStorage: CardsStorage,
               private eventsProvider: EventsProvider) {
     this.cardId = this.navParams.get('cardId');
     this.setCode = this.navParams.get('setCode');
@@ -40,13 +40,13 @@ export class CardPage {
     this.set = this.navParams.get('set');
 
     if (!this.card) {
-      this.cardsProvider.getCardFromStorage(this.cardId).then((card: Card) => {
+      this.cardsStorage.getCardFromStorage(this.cardId).then((card: Card) => {
         this.card = card;
       });
     }
 
     if (!this.set) {
-      this.cardsProvider.getSetFromStorage(this.setCode).then((set: Set) => {
+      this.cardsStorage.getSetFromStorage(this.setCode).then((set: Set) => {
         this.set = set;
       });
     }
@@ -95,7 +95,7 @@ export class CardPage {
       modal.present();
     });
 
-    this.cardsProvider.storeCardImageHiRes(this.setCode, this.cardId).then((card: Card) => {
+    this.cardsStorage.storeCardImageHiRes(this.setCode, this.card).then((card: Card) => {
       this.card.imageEntryHiRes = card.imageEntryHiRes;
     });
   }

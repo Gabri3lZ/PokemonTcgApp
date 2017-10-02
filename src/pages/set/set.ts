@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {CardsProvider} from "../../providers/cards/cards";
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
+import {CardsStorage} from "../../interfaces/cards/cardsStorage";
 
 @IonicPage({
   name: 'set-page',
@@ -26,9 +27,12 @@ export class SetPage {
     this.cardsProvider.viewOption = viewOption;
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cardsProvider: CardsProvider) {
-    this.setCode = navParams.get('setCode');
-    this.set = navParams.get('set');
+  constructor(private navCtrl: NavController,
+              private navParams: NavParams,
+              private cardsProvider: CardsProvider,
+              private cardsStorage: CardsStorage) {
+    this.setCode = this.navParams.get('setCode');
+    this.set = this.navParams.get('set');
 
     if (this.navCtrl.last()) {
       if (!this.setCode) {
@@ -42,15 +46,15 @@ export class SetPage {
       }
     }
 
-    this.cardsProvider.getCardsFromStorage(this.setCode).then((cards: Card[]) => {
+    this.cardsStorage.getCardsFromStorage(this.setCode).then((cards: Card[]) => {
       this.cards = cards;
-      this.cardsProvider.storeSetImages(this.setCode, this.cards).then((cards: Card[]) => {
+      this.cardsStorage.storeSetImages(this.setCode, this.cards).then((cards: Card[]) => {
         this.cards = cards;
       });
     });
 
     if (!this.set) {
-      this.cardsProvider.getSetFromStorage(this.setCode).then((set: Set) => {
+      this.cardsStorage.getSetFromStorage(this.setCode).then((set: Set) => {
         this.set = set;
       });
     }

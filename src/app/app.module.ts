@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
@@ -14,6 +14,10 @@ import { EventsProvider } from '../providers/events/events';
 import {IonicStorageModule} from "@ionic/storage";
 import { File } from "@ionic-native/file";
 import { FileTransfer } from "@ionic-native/file-transfer";
+import {CardsLoaderPokemonTcgApiProvider} from "../providers/cards/cardsLoaderPokemonTcgApi";
+import {CardsStoragePouchDbProvider} from "../providers/cards/cardsStoragePouchDb";
+import {CardsLoader} from "../interfaces/cards/cardsLoader";
+import {CardsStorage} from "../interfaces/cards/cardsStorage";
 
 @NgModule({
   declarations: [
@@ -37,6 +41,8 @@ import { FileTransfer } from "@ionic-native/file-transfer";
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CardsProvider,
+    {provide: CardsLoader, useClass: CardsLoaderPokemonTcgApiProvider},
+    {provide: CardsStorage, useClass: CardsStoragePouchDbProvider},
     EventsProvider,
     File,
     FileTransfer
