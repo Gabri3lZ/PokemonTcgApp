@@ -72,7 +72,6 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
             set.imageEntry = set.imageUrls[0];
           }
           this.cardsLoader.downloadFile(set.symbolUrl, 'sets/' + set.code + '-symbol.png').then((symbolEntry: FileEntry) => {
-            counter++;
             if (symbolEntry) {
               set.symbolEntry = symbolEntry.toURL();
               if (this.platform.is('ios')) {
@@ -82,7 +81,13 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
               set.symbolEntry = set.symbolUrl;
             }
             this.storeSet(set).then((storedSet: Set) => {
+              counter++;
               set._rev = storedSet._rev;
+              if (counter === sets.length) {
+                resolve(sets);
+              }
+            }, (error) => {
+              counter++;
               if (counter === sets.length) {
                 resolve(sets);
               }
@@ -94,11 +99,9 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
   }
 
   public storeSet(set: Set): Promise<Set> {
-    return new Promise((resolve, reject) => {
-      this.setsDb.put(set).then((response: PutResponse) => {
-        set._rev = response.rev;
-        resolve(set);
-      });
+    return this.setsDb.put(set).then((response: PutResponse) => {
+      set._rev = response.rev;
+      return set;
     });
   }
 
@@ -106,9 +109,14 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
     return new Promise((resolve, reject) => {
       let counter = 0;
       for (let card of cards) {
-        this.cardsDb.put(card).then((response: PutResponse) => {
+        this.storeCard(card).then((storedCard: Card) => {
           counter++;
-          card._rev = response.rev;
+          card._rev = storedCard._rev;
+          if (counter === cards.length) {
+            resolve(cards);
+          }
+        }, (error) => {
+          counter++;
           if (counter === cards.length) {
             resolve(cards);
           }
@@ -118,11 +126,9 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
   }
 
   public storeCard(card: Card): Promise<Card> {
-    return new Promise((resolve, reject) => {
-      this.cardsDb.put(card).then((response: PutResponse) => {
-        card._rev = response.rev;
-        resolve(card);
-      });
+    return this.cardsDb.put(card).then((response: PutResponse) => {
+      card._rev = response.rev;
+      return card;
     });
   }
 
@@ -132,7 +138,6 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
       for (let card of cards) {
         if (!card.imageEntry) {
           this.cardsLoader.downloadFile(card.imageUrl, 'cards/' + setCode + '/' + card.number + '.png').then((imageEntry: FileEntry) => {
-            counter++;
             if (imageEntry) {
               card.imageEntry = imageEntry.toURL();
               if (this.platform.is('ios')) {
@@ -142,7 +147,13 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
               card.imageEntry = card.imageUrl;
             }
             this.storeCard(card).then((storedCard: Card) => {
+              counter++;
               card._rev = storedCard._rev;
+              if (counter === cards.length) {
+                resolve(cards);
+              }
+            }, (error) => {
+              counter++;
               if (counter === cards.length) {
                 resolve(cards);
               }
@@ -156,32 +167,24 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
   }
 
   public storeCardImageHiRes(setCode: string, card: Card): Promise<Card> {
-    return new Promise((resolve, reject) => {
-      this.getCardFromStorage(card.id).then((card: Card) => {
-        if (card && !card.imageEntryHiRes) {
-          this.cardsLoader.downloadFile(card.imageUrlHiRes, 'cards/' + setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
-            if (imageEntryHiRes) {
-              card.imageEntryHiRes = imageEntryHiRes.toURL();
-              if (this.platform.is('ios')) {
-                card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
-              }
-            } else {
-              card.imageEntryHiRes = card.imageUrlHiRes;
+    return this.getCardFromStorage(card.id).then((card: Card) => {
+      if (card && !card.imageEntryHiRes) {
+        return this.cardsLoader.downloadFile(card.imageUrlHiRes, 'cards/' + setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
+          if (imageEntryHiRes) {
+            card.imageEntryHiRes = imageEntryHiRes.toURL();
+            if (this.platform.is('ios')) {
+              card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
             }
-            this.storeCard(card).then((storedCard: Card) => {
-              resolve(storedCard);
-            }, (error) => {
-              reject(error);
-            });
-          });
-        } else {
-          if (card) {
-            resolve(card);
           } else {
-            reject(new Error('card not found'));
+            card.imageEntryHiRes = card.imageUrlHiRes;
           }
-        }
-      });
+          return this.storeCard(card).then((storedCard: Card) => {
+            return storedCard;
+          });
+        });
+      } else if (card) {
+        return card;
+      }
     });
   }
 
