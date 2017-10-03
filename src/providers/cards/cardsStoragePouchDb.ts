@@ -7,7 +7,7 @@ import {CardsStorage} from "../../interfaces/cards/cardsStorage";
 import {CardsLoader} from "../../interfaces/cards/cardsLoader";
 import PouchDB from 'pouchdb';
 import pouchDbFindPlugin from 'pouchdb-find';
-// import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
+import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
 import AllDocsResponse = PouchDB.Core.AllDocsResponse;
 import PutResponse = PouchDB.Core.Response;
 import ExistingDocument = PouchDB.Core.ExistingDocument;
@@ -24,14 +24,15 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
   }
 
   public init(): Promise<void> {
-    /*
-    PouchDB.plugin(cordovaSqlitePlugin);
-    this.setsDb = new PouchDB('sets.db', <any>{adapter: 'cordova-sqlite', location: 'default'});
-    this.cardsDb = new PouchDB('cards.db', <any>{adapter: 'cordova-sqlite', location: 'default'});
-    */
     PouchDB.plugin(pouchDbFindPlugin);
-    this.setsDb = new PouchDB('sets.db');
-    this.cardsDb = new PouchDB('cards.db');
+    if (this.platform.is('ios') || this.platform.is('android')) {
+      PouchDB.plugin(cordovaSqlitePlugin);
+      this.setsDb = new PouchDB('sets.db', <any>{adapter: 'cordova-sqlite', location: 'default'});
+      this.cardsDb = new PouchDB('cards.db', <any>{adapter: 'cordova-sqlite', location: 'default'});
+    } else {
+      this.setsDb = new PouchDB('sets.db');
+      this.cardsDb = new PouchDB('cards.db');
+    }
 
     return this.cardsDb.createIndex({
       index: {fields: [
