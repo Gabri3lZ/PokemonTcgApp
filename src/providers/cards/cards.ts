@@ -27,7 +27,7 @@ export class CardsProvider {
                   this.cardsInitialized.emit();
                   resolve();
                 }
-              })
+              });
             }
           });
         });

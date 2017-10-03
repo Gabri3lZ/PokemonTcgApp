@@ -18,6 +18,7 @@ import {CardsLoaderPokemonTcgApiProvider} from "../providers/cards/cardsLoaderPo
 import {CardsStoragePouchDbProvider} from "../providers/cards/cardsStoragePouchDb";
 import {CardsLoader} from "../interfaces/cards/cardsLoader";
 import {CardsStorage} from "../interfaces/cards/cardsStorage";
+import {SQLite} from "@ionic-native/sqlite";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {CardsStorage} from "../interfaces/cards/cardsStorage";
     {provide: CardsStorage, useClass: CardsStoragePouchDbProvider},
     EventsProvider,
     File,
-    FileTransfer
+    FileTransfer,
+    SQLite
   ]
 })
 export class AppModule {}
