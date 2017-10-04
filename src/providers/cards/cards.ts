@@ -42,8 +42,10 @@ export class CardsProvider {
           resolve(sets);
         } else {
           this.cardsLoader.downloadSets().then((sets: Set[]) => {
-            this.cardsStorer.storeSets(sets).then((sets: Set[]) => {
-              resolve(sets);
+            this.cardsLoader.downloadSetImages(sets).then((sets: Set[]) => {
+              this.cardsStorer.storeSets(sets).then((sets: Set[]) => {
+                resolve(sets);
+              });
             });
           });
         }

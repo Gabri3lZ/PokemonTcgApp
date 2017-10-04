@@ -9,9 +9,6 @@ export abstract class CardsStorage {
   abstract storeCards(cards: Card[]): Promise<Card[]>;
   abstract storeCard(card: Card): Promise<Card>;
 
-  abstract storeSetImages(setCode: string, cards: Card[]): Promise<Card[]>;
-  abstract storeCardImageHiRes(setCode: string, card: Card): Promise<Card>;
-
   abstract getSetsFromStorage(): Promise<Set[]>;
   abstract getSetFromStorage(setCode: string): Promise<Set>;
   abstract getCardsFromStorage(setCode: string): Promise<Card[]>;

@@ -10,6 +10,10 @@ export abstract class CardsLoader {
   abstract downloadCards(setCode: string): Promise<Card[]>;
   abstract downloadCard(cardId: string): Promise<Card>;
 
+  abstract downloadSetImages(sets: Set[]): Promise<Set[]>;
+  abstract downloadCardImages(cards: Card[]): Promise<Card[]>;
+  abstract downloadCardImageHiRes(card: Card): Promise<Card>;
+
   abstract downloadFile(url: string, path: string): Promise<FileEntry>;
   abstract downloadFileWithFallback(urls: string[], path: string): Promise<FileEntry>;
 }

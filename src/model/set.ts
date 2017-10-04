@@ -2,6 +2,9 @@ export class Set {
 
   _id: string;
   _rev: string;
+  $loki: number;
+  meta: {revision: number, created: number, version: number};
+
   code: string;
   ptcgoCode: string;
   name: string;

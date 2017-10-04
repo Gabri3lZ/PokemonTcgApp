@@ -7,6 +7,9 @@ import {Ability} from "./ability";
 export class Card {
   _id: string;
   _rev: string;
+  $loki: number;
+  meta: {revision: number, created: number, version: number};
+
   id: string;
   name: string;
   nationalPokedexNumber: number;

@@ -5,6 +5,7 @@ import {Set} from "../../model/set";
 import {EventsProvider} from "../../providers/events/events";
 import {DIRECTION_LEFT, DIRECTION_RIGHT} from "ionic-angular/gestures/hammer";
 import {CardsStorage} from "../../interfaces/cards/cardsStorage";
+import {CardsLoader} from "../../interfaces/cards/cardsLoader";
 
 @IonicPage({
   name: 'card-page',
@@ -32,6 +33,7 @@ export class CardPage {
               private viewCtrl: ViewController,
               private navParams: NavParams,
               private cardsStorage: CardsStorage,
+              private cardsLoader: CardsLoader,
               private eventsProvider: EventsProvider) {
     this.cardId = this.navParams.get('cardId');
     this.setCode = this.navParams.get('setCode');
@@ -95,8 +97,10 @@ export class CardPage {
       modal.present();
     });
 
-    this.cardsStorage.storeCardImageHiRes(this.setCode, this.card).then((card: Card) => {
-      this.card.imageEntryHiRes = card.imageEntryHiRes;
+    this.cardsLoader.downloadCardImageHiRes(this.card).then((card: Card) => {
+      this.cardsStorage.storeCard(card).then((card: Card) => {
+        this.card.imageEntryHiRes = card.imageEntryHiRes;
+      });
     });
   }
 

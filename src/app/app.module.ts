@@ -1,24 +1,24 @@
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
-import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import {MyApp} from './app.component';
+import {HomePage} from '../pages/home/home';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { CardsProvider } from '../providers/cards/cards';
-import { HttpModule } from "@angular/http";
-import { ComponentsModule } from "../components/components.module";
-import { EventsProvider } from '../providers/events/events';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {CardsProvider} from '../providers/cards/cards';
+import {HttpModule} from "@angular/http";
+import {ComponentsModule} from "../components/components.module";
+import {EventsProvider} from '../providers/events/events';
 import {IonicStorageModule} from "@ionic/storage";
-import { File } from "@ionic-native/file";
-import { FileTransfer } from "@ionic-native/file-transfer";
+import {File} from "@ionic-native/file";
+import {FileTransfer} from "@ionic-native/file-transfer";
 import {CardsLoaderPokemonTcgApiProvider} from "../providers/cards/cardsLoaderPokemonTcgApi";
-import {CardsStoragePouchDbProvider} from "../providers/cards/cardsStoragePouchDb";
 import {CardsLoader} from "../interfaces/cards/cardsLoader";
 import {CardsStorage} from "../interfaces/cards/cardsStorage";
 import {SQLite} from "@ionic-native/sqlite";
+import {CardsStorageLokiJsProvider} from "../providers/cards/cardsStorageLokiJs";
 
 @NgModule({
   declarations: [
@@ -43,7 +43,7 @@ import {SQLite} from "@ionic-native/sqlite";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CardsProvider,
     {provide: CardsLoader, useClass: CardsLoaderPokemonTcgApiProvider},
-    {provide: CardsStorage, useClass: CardsStoragePouchDbProvider},
+    {provide: CardsStorage, useClass: CardsStorageLokiJsProvider},
     EventsProvider,
     File,
     FileTransfer,

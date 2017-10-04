@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Set} from "../../model/set";
 import {Card} from "../../model/card";
-import {FileEntry} from "@ionic-native/file";
 import {Platform} from "ionic-angular";
 import {CardsStorage} from "../../interfaces/cards/cardsStorage";
-import {CardsLoader} from "../../interfaces/cards/cardsLoader";
 import PouchDB from 'pouchdb';
 import pouchDbFindPlugin from 'pouchdb-find';
 import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
@@ -19,8 +17,7 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
   private setsDb: PouchDB.Database;
   private cardsDb: PouchDB.Database;
 
-  constructor(private platform: Platform,
-              private cardsLoader: CardsLoader) {
+  constructor(private platform: Platform) {
   }
 
   public init(): Promise<void> {
@@ -61,39 +58,18 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
 
   public storeSets(sets: Set[]): Promise<Set[]> {
     return new Promise((resolve, reject) => {
-      let counter = 0;
+      let storedSets: Set[] = [];
       for (let set of sets) {
-        this.cardsLoader.downloadFileWithFallback(set.imageUrls, 'sets/' + set.code + '-image.png').then((imageEntry: FileEntry) => {
-          if (imageEntry) {
-            set.imageEntry = imageEntry.toURL();
-            if (this.platform.is('ios')) {
-              set.imageEntry = set.imageEntry.substring(7, set.imageEntry.length);
-            }
-          } else {
-            set.imageEntry = set.imageUrls[0];
+        this.storeSet(set).then((storedSet) => {
+          storedSets.push(storedSet);
+          if (storedSets.length === sets.length) {
+            resolve(storedSets);
           }
-          this.cardsLoader.downloadFile(set.symbolUrl, 'sets/' + set.code + '-symbol.png').then((symbolEntry: FileEntry) => {
-            if (symbolEntry) {
-              set.symbolEntry = symbolEntry.toURL();
-              if (this.platform.is('ios')) {
-                set.symbolEntry = set.symbolEntry.substring(7, set.symbolEntry.length);
-              }
-            } else {
-              set.symbolEntry = set.symbolUrl;
-            }
-            this.storeSet(set).then((storedSet: Set) => {
-              counter++;
-              set._rev = storedSet._rev;
-              if (counter === sets.length) {
-                resolve(sets);
-              }
-            }, (error) => {
-              counter++;
-              if (counter === sets.length) {
-                resolve(sets);
-              }
-            });
-          });
+        }, (error) => {
+          storedSets.push(set);
+          if (storedSets.length === sets.length) {
+            resolve(storedSets);
+          }
         });
       }
     });
@@ -108,17 +84,16 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
 
   public storeCards(cards: Card[]): Promise<Card[]> {
     return new Promise((resolve, reject) => {
-      let counter = 0;
+      let storedCards: Card[] = [];
       for (let card of cards) {
         this.storeCard(card).then((storedCard: Card) => {
-          counter++;
-          card._rev = storedCard._rev;
-          if (counter === cards.length) {
+          storedCards.push(storedCard);
+          if (storedCards.length === cards.length) {
             resolve(cards);
           }
         }, (error) => {
-          counter++;
-          if (counter === cards.length) {
+          storedCards.push(card);
+          if (storedCards.length === cards.length) {
             resolve(cards);
           }
         });
@@ -130,62 +105,6 @@ export class CardsStoragePouchDbProvider implements CardsStorage {
     return this.cardsDb.put(card).then((response: PutResponse) => {
       card._rev = response.rev;
       return card;
-    });
-  }
-
-  public storeSetImages(setCode: string, cards: Card[]): Promise<Card[]> {
-    return new Promise((resolve, reject) => {
-      let counter = 0;
-      for (let card of cards) {
-        if (!card.imageEntry) {
-          this.cardsLoader.downloadFile(card.imageUrl, 'cards/' + setCode + '/' + card.number + '.png').then((imageEntry: FileEntry) => {
-            if (imageEntry) {
-              card.imageEntry = imageEntry.toURL();
-              if (this.platform.is('ios')) {
-                card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
-              }
-            } else {
-              card.imageEntry = card.imageUrl;
-            }
-            this.storeCard(card).then((storedCard: Card) => {
-              counter++;
-              card._rev = storedCard._rev;
-              if (counter === cards.length) {
-                resolve(cards);
-              }
-            }, (error) => {
-              counter++;
-              if (counter === cards.length) {
-                resolve(cards);
-              }
-            });
-          });
-        } else {
-          counter++;
-        }
-      }
-    });
-  }
-
-  public storeCardImageHiRes(setCode: string, card: Card): Promise<Card> {
-    return this.getCardFromStorage(card.id).then((card: Card) => {
-      if (card && !card.imageEntryHiRes) {
-        return this.cardsLoader.downloadFile(card.imageUrlHiRes, 'cards/' + setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
-          if (imageEntryHiRes) {
-            card.imageEntryHiRes = imageEntryHiRes.toURL();
-            if (this.platform.is('ios')) {
-              card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
-            }
-          } else {
-            card.imageEntryHiRes = card.imageUrlHiRes;
-          }
-          return this.storeCard(card).then((storedCard: Card) => {
-            return storedCard;
-          });
-        });
-      } else if (card) {
-        return card;
-      }
     });
   }
 

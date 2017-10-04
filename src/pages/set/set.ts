@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {CardsProvider} from "../../providers/cards/cards";
 import {Card} from "../../model/card";
 import {Set} from "../../model/set";
 import {CardsStorage} from "../../interfaces/cards/cardsStorage";
+import {CardsLoader} from "../../interfaces/cards/cardsLoader";
 
 @IonicPage({
   name: 'set-page',
@@ -30,7 +31,8 @@ export class SetPage {
   constructor(private navCtrl: NavController,
               private navParams: NavParams,
               private cardsProvider: CardsProvider,
-              private cardsStorage: CardsStorage) {
+              private cardsStorage: CardsStorage,
+              private cardsLoader: CardsLoader) {
     this.setCode = this.navParams.get('setCode');
     this.set = this.navParams.get('set');
 
@@ -48,8 +50,10 @@ export class SetPage {
 
     this.cardsStorage.getCardsFromStorage(this.setCode).then((cards: Card[]) => {
       this.cards = cards;
-      this.cardsStorage.storeSetImages(this.setCode, this.cards).then((cards: Card[]) => {
-        this.cards = cards;
+      this.cardsLoader.downloadCardImages(this.cards).then((cards: Card[]) => {
+        this.cardsStorage.storeCards(cards).then((cards: Card[]) => {
+          this.cards = cards;
+        });
       });
     });
 

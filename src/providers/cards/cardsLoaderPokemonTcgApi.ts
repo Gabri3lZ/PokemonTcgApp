@@ -88,6 +88,82 @@ export class CardsLoaderPokemonTcgApiProvider implements CardsLoader {
     });
   }
 
+  public downloadSetImages(sets: Set[]): Promise<Set[]> {
+    return new Promise((resolve, reject) => {
+      let counter = 0;
+      for (let set of sets) {
+        this.downloadFileWithFallback(set.imageUrls, 'sets/' + set.code + '-image.png').then((imageEntry: FileEntry) => {
+          if (imageEntry) {
+            set.imageEntry = imageEntry.toURL();
+            if (this.platform.is('ios')) {
+              set.imageEntry = set.imageEntry.substring(7, set.imageEntry.length);
+            }
+          } else {
+            set.imageEntry = set.imageUrls[0];
+          }
+          this.downloadFile(set.symbolUrl, 'sets/' + set.code + '-symbol.png').then((symbolEntry: FileEntry) => {
+            if (symbolEntry) {
+              set.symbolEntry = symbolEntry.toURL();
+              if (this.platform.is('ios')) {
+                set.symbolEntry = set.symbolEntry.substring(7, set.symbolEntry.length);
+              }
+            } else {
+              set.symbolEntry = set.symbolUrl;
+            }
+            counter++;
+            if (counter === sets.length) {
+              resolve(sets);
+            }
+          });
+        });
+      }
+    });
+  }
+
+  public downloadCardImages(cards: Card[]): Promise<Card[]> {
+    return new Promise((resolve, reject) => {
+      let counter = 0;
+      for (let card of cards) {
+        if (!card.imageEntry) {
+          this.downloadFile(card.imageUrl, 'cards/' + card.setCode + '/' + card.number + '.png').then((imageEntry: FileEntry) => {
+            if (imageEntry) {
+              card.imageEntry = imageEntry.toURL();
+              if (this.platform.is('ios')) {
+                card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
+              }
+            } else {
+              card.imageEntry = card.imageUrl;
+            }
+            counter++;
+            if (counter === cards.length) {
+              resolve(cards);
+            }
+          });
+        } else {
+          counter++;
+        }
+      }
+    });
+  }
+
+  public downloadCardImageHiRes(card: Card): Promise<Card> {
+    if (!card.imageEntryHiRes) {
+      return this.downloadFile(card.imageUrlHiRes, 'cards/' + card.setCode + '/' + card.number + '-hires.png').then((imageEntryHiRes: FileEntry) => {
+        if (imageEntryHiRes) {
+          card.imageEntryHiRes = imageEntryHiRes.toURL();
+          if (this.platform.is('ios')) {
+            card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
+          }
+        } else {
+          card.imageEntryHiRes = card.imageUrlHiRes;
+        }
+        return card;
+      });
+    } else if (card) {
+      return Promise.resolve(card);
+    }
+  }
+
   public downloadFile(url: string, path: string): Promise<FileEntry> {
     return new Promise((resolve, reject) => {
       if (this.storageDirectory) {
