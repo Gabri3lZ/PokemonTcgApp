@@ -132,7 +132,9 @@ export class CardsLoaderPokemonTcgApiProvider implements CardsLoader {
                 card.imageEntry = card.imageEntry.substring(7, card.imageEntry.length);
               }
             } else {
-              card.imageEntry = card.imageUrl;
+              if (!this.platform.is('ios') && !this.platform.is('android')) {
+                card.imageEntry = card.imageUrl;
+              }
             }
             counter++;
             if (counter === cards.length) {
@@ -155,7 +157,9 @@ export class CardsLoaderPokemonTcgApiProvider implements CardsLoader {
             card.imageEntryHiRes = card.imageEntryHiRes.substring(7, card.imageEntryHiRes.length);
           }
         } else {
-          card.imageEntryHiRes = card.imageUrlHiRes;
+          if (!this.platform.is('ios') && !this.platform.is('android')) {
+            card.imageEntryHiRes = card.imageUrlHiRes;
+          }
         }
         return card;
       });
