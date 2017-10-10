@@ -3,6 +3,7 @@ import {Set} from "../../model/set";
 import {Card} from "../../model/card";
 import {CardsStorage} from "../../interfaces/cards/cardsStorage";
 import loki from "lokijs";
+import {LokiStorageAdapter} from "../adapter/lokiStorageAdapter";
 
 @Injectable()
 export class CardsStorageLokiJsProvider implements CardsStorage {
@@ -11,48 +12,61 @@ export class CardsStorageLokiJsProvider implements CardsStorage {
   private sets: LokiCollection<Set>;
   private cards: LokiCollection<Card>;
 
-  constructor() {
+  constructor(private lokiStorageAdapter: LokiStorageAdapter) {
   }
 
   public init(): Promise<void> {
-    this.db = new loki('data.json');
-    this.sets = this.db.addCollection<Set>('sets', {
-      autoupdate: true,
-      unique: ['code'],
-      indices: [
-        'code',
-        'ptcgoCode',
-        'name',
-        'series',
-        'standardLegal',
-        'expandedLegal',
-        'releaseDate'
-      ]
+    this.db = new loki('data.json', {
+      adapter: this.lokiStorageAdapter,
+      autosave: true
     });
-    this.cards = this.db.addCollection<Card>('cards', {
-      autoupdate: true,
-      unique: ['id'],
-      indices: [
-        'id',
-        'name',
-        'types',
-        'supertype',
-        'subtype',
-        'ability',
-        'ancientTrait',
-        'hp',
-        'retreatCost',
-        'number',
-        'rarity',
-        'series',
-        'set',
-        'setCode',
-        'attacks',
-        'resistances',
-        'weaknesses'
-      ]
+    return new Promise<void>((resolve, reject) => {
+      this.db.loadDatabase({}, () => {
+        this.sets = this.db.getCollection<Set>('sets');
+        if (!this.sets) {
+          this.sets = this.db.addCollection<Set>('sets', {
+            autoupdate: true,
+            unique: ['code'],
+            indices: [
+              'code',
+              'ptcgoCode',
+              'name',
+              'series',
+              'standardLegal',
+              'expandedLegal',
+              'releaseDate'
+            ]
+          });
+        }
+        this.cards = this.db.getCollection<Card>('cards');
+        if (!this.cards) {
+          this.cards = this.db.addCollection<Card>('cards', {
+            autoupdate: true,
+            unique: ['id'],
+            indices: [
+              'id',
+              'name',
+              'types',
+              'supertype',
+              'subtype',
+              'ability',
+              'ancientTrait',
+              'hp',
+              'retreatCost',
+              'number',
+              'rarity',
+              'series',
+              'set',
+              'setCode',
+              'attacks',
+              'resistances',
+              'weaknesses'
+            ]
+          });
+        }
+        resolve();
+      });
     });
-    return Promise.resolve();
   }
 
   public storeSets(sets: Set[]): Promise<Set[]> {

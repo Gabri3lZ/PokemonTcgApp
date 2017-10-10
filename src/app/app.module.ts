@@ -19,6 +19,7 @@ import {CardsLoader} from "../interfaces/cards/cardsLoader";
 import {CardsStorage} from "../interfaces/cards/cardsStorage";
 import {SQLite} from "@ionic-native/sqlite";
 import {CardsStorageLokiJsProvider} from "../providers/cards/cardsStorageLokiJs";
+import {LokiStorageAdapter} from "../providers/adapter/lokiStorageAdapter";
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import {CardsStorageLokiJsProvider} from "../providers/cards/cardsStorageLokiJs"
     CardsProvider,
     {provide: CardsLoader, useClass: CardsLoaderPokemonTcgApiProvider},
     {provide: CardsStorage, useClass: CardsStorageLokiJsProvider},
+    LokiStorageAdapter,
     EventsProvider,
     File,
     FileTransfer,
